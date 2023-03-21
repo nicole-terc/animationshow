@@ -28,6 +28,7 @@ object TileColor {
     )
 
     fun random() = list.random()
+    fun randomFilter(filter: Color) = list.filter { it != filter }.random()
 }
 
 val md_theme_light_primary = Color(0xFF005CBB)

@@ -1,4 +1,4 @@
-package nstv.animationshow.common.main
+package nstv.animationshow.common.screen
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
@@ -14,12 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,26 +27,34 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import nstv.animationshow.common.screen.squareGrid.SquareGrid
 import nstv.animationshow.common.design.Grid
+import nstv.animationshow.common.screen.Screen.GRID
+import nstv.animationshow.common.screen.Screen.RIPPLE
+import nstv.animationshow.common.screen.Screen.VISIBILITY
+import nstv.animationshow.common.screen.ripple.RippleGrid
+import nstv.animationshow.common.screen.squareGrid.SquareGrid
+import nstv.animationshow.common.screen.visibility.VisibilityScreen
 
 
 private enum class Screen {
     GRID,
+    RIPPLE,
+    VISIBILITY,
 }
 
+const val NumberOfColumns = 10
 
 @Composable
 fun MainContent(modifier: Modifier = Modifier) {
 
     val useDarkIcons = isSystemInDarkTheme().not()
-    val surfaceColor = MaterialTheme.colors.surface
+    val surfaceColor = MaterialTheme.colorScheme.surface
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
         var expanded by remember { mutableStateOf(false) }
-        var selectedScreen by remember { mutableStateOf(Screen.GRID) }
+        var selectedScreen by remember { mutableStateOf(VISIBILITY) }
 
         Column(
             modifier = Modifier
@@ -61,7 +69,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                 Row(modifier = Modifier.clickable { expanded = true }) {
                     Text(
                         text = selectedScreen.name,
-                        style = MaterialTheme.typography.h6,
+                        style = MaterialTheme.typography.headlineSmall,
                     )
                     Icon(
                         Icons.Default.ArrowDropDown,
@@ -85,13 +93,14 @@ fun MainContent(modifier: Modifier = Modifier) {
                 }
             }
             Spacer(modifier = Modifier.padding(vertical = Grid.One))
-
             Crossfade(
                 targetState = selectedScreen,
                 animationSpec = tween(durationMillis = 500)
             ) { screen ->
                 when (screen) {
-                    Screen.GRID -> SquareGrid(numberOfColumns = 10)
+                    GRID -> SquareGrid(numberOfColumns = NumberOfColumns)
+                    RIPPLE -> RippleGrid(numberOfColumns = NumberOfColumns)
+                    VISIBILITY -> VisibilityScreen()
                 }
             }
         }

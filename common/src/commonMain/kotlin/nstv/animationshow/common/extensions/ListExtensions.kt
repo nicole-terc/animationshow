@@ -1,9 +1,15 @@
-package nstv.canvasExtensions
+package nstv.animationshow.common.extensions
 
 fun Int.nextIndexLoop(currentIndex: Int): Int =
     if (currentIndex + 1 >= this) 0 else currentIndex + 1
 
+fun Int.previousIndexLoop(currentIndex: Int): Int =
+    if (currentIndex - 1 < 0) this - 1 else currentIndex - 1
+
 fun <E> Collection<E>.nextIndexLoop(currentIndex: Int): Int = this.size.nextIndexLoop(currentIndex)
+
+fun <E> Collection<E>.previousIndexLoop(currentIndex: Int): Int = this.size.previousIndexLoop(currentIndex)
+
 
 fun <E> List<E>.nextItemLoop(currentIndex: Int): E = this[nextIndexLoop(currentIndex)]
 

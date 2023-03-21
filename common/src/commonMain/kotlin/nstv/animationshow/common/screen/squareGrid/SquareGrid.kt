@@ -15,9 +15,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.extensions.toDpSizeSquared
-import nstv.animationshow.common.screen.tile.Tile
-import nstv.animationshow.common.screen.tile.TileList
-import nstv.animationshow.common.screen.tile.TileSimpleSquare
+import nstv.animationshow.common.screen.base.Tile
+import nstv.animationshow.common.screen.base.TileList
+import nstv.animationshow.common.screen.base.TileSimpleSquare
 
 
 @Composable

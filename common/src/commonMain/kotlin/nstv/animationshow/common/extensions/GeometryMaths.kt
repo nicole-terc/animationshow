@@ -1,4 +1,4 @@
-package nstv.canvasExtensions.maths
+package nstv.animationshow.common.extensions
 
 import androidx.compose.ui.geometry.Offset
 import kotlin.math.PI
