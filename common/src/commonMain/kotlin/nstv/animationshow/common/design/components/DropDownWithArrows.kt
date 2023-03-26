@@ -70,11 +70,11 @@ fun DropDownWithArrows(
                         slideInVertically { height -> height } + fadeIn() with
                                 slideOutVertically { height -> -height } + fadeOut()
                     } else if (targetState > initialState) {
-                        slideInHorizontally { width -> width } + fadeIn() with
-                                slideOutHorizontally { width -> -width } + fadeOut()
+                        slideInHorizontally { width -> width/2 } + fadeIn() with
+                                slideOutHorizontally { width -> -width/2 } + fadeOut()
                     } else {
-                        slideInHorizontally { width -> -width } + fadeIn() with
-                                slideOutHorizontally { width -> width } + fadeOut()
+                        slideInHorizontally { width -> -width/2 } + fadeIn() with
+                                slideOutHorizontally { width -> width/2 } + fadeOut()
                     }.using(
                         SizeTransform(clip = false)
                     )

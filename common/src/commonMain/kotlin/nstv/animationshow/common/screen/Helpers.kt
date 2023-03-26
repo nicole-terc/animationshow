@@ -1,6 +1,5 @@
 package nstv.animationshow.common.screen
 
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandIn
@@ -38,11 +37,11 @@ val enterTransitions = mapOf(
 val exitTransitions = mapOf(
     "fadeOut" to fadeOut(),
     "slideOut" to slideOut { IntOffset(it.width, it.height) },
-    "slideOutHorizontally" to slideOutHorizontally { it },
-    "slideOutVertically" to slideOutVertically { it },
+    "slideOutHorizontally" to slideOutHorizontally { it / 2 },
+    "slideOutVertically" to slideOutVertically { it / 2 },
     "scaleOut" to scaleOut(),
-    "shrinkOut" to shrinkOut { it },
-    "shrinkHorizontally" to shrinkHorizontally { it },
+    "shrinkOut" to shrinkOut { it / 2 },
+    "shrinkHorizontally" to shrinkHorizontally { it / 2 },
     "shrinkVertically" to shrinkVertically(),
     "fadeOut + shrinkV" to fadeOut() + shrinkVertically(),
     "fadeOut + shrinkH" to fadeOut() + shrinkHorizontally { it / 2 },
