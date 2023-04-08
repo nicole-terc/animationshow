@@ -22,8 +22,8 @@ import nstv.animationshow.common.screen.base.TileSimpleSquare
 
 @Composable
 fun SquareGrid(
-    numberOfColumns: Int,
     modifier: Modifier = Modifier,
+    numberOfColumns: Int = 10,
     items: List<Tile> = TileList.simple(numberOfColumns * numberOfColumns),
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }

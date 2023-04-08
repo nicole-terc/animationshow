@@ -11,8 +11,8 @@ object TileColor {
     val Yellow = Color(0xFFFFEB3B)
     val Purple = Color(0xFF6200EA)
     val Magenta = Color(0xFFC51162)
-    val Orange = Color(0xFFFF9800)
     val Red = Color(0xFFFF0000)
+    val Orange = Color(0xFFFF9800)
 
     val list = listOf(
         LightGray,
@@ -23,8 +23,8 @@ object TileColor {
         Yellow,
         Purple,
         Magenta,
-        Orange,
         Red,
+        Orange,
     )
 
     fun random() = list.random()

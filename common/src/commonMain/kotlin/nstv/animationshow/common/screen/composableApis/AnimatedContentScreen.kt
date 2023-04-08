@@ -1,8 +1,8 @@
-package nstv.animationshow.common.screen.visibility
+package nstv.animationshow.common.screen.composableApis
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,18 +16,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.DropDownWithArrows
+import nstv.animationshow.common.extensions.nextItemLoop
 import nstv.animationshow.common.screen.base.ColorScreen
+import nstv.animationshow.common.screen.base.LoadingScreen
+import nstv.animationshow.common.screen.composableApis.SubScreen.*
 import nstv.animationshow.common.screen.enterTransitions
 import nstv.animationshow.common.screen.exitTransitions
+import nstv.animationshow.common.screen.squareGrid.SquareGrid
 
 
+private enum class SubScreen {
+    LoadingSubScreen,
+    ColorSubScreen,
+    GridSubScreen,
+    None,
+}
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun VisibilityScreen(
+fun AnimatedContentScreen(
     modifier: Modifier = Modifier,
 ) {
-    var visible by remember { mutableStateOf(true) }
+    var currentSubScreen by remember { mutableStateOf(LoadingSubScreen) }
     var enterTransitionIndex by remember { mutableStateOf(0) }
     var exitTransitionIndex by remember { mutableStateOf(0) }
 
@@ -59,19 +70,23 @@ fun VisibilityScreen(
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                visible = !visible
+                currentSubScreen = SubScreen.values().nextItemLoop(currentSubScreen)
             }
         ) {
-            Text(text = "Click to toggle visibility")
+            Text(text = "Click to change screen")
         }
-        AnimatedVisibility(
-            visible = visible,
-            modifier = Modifier,
-            enter = enterTransitions.values.toList()[enterTransitionIndex],
-            exit = exitTransitions.values.toList()[exitTransitionIndex],
+        AnimatedContent(
+            targetState = currentSubScreen,
+            transitionSpec = {
+                enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                        exitTransitions.values.toList()[exitTransitionIndex] // Exit Transition
+            },
         ) {
-            ColorScreen(color = TileColor.Blue) {
-                Text("I'm visible! :D")
+            when (it) {
+                LoadingSubScreen -> LoadingScreen()
+                ColorSubScreen -> ColorScreen()
+                GridSubScreen -> SquareGrid()
+                None -> {}
             }
         }
     }
