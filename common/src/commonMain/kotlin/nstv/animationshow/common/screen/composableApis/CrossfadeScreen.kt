@@ -6,13 +6,12 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.onClick
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -27,9 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
@@ -60,15 +56,6 @@ fun CrossfadeScreen(
     var animationSpecExpanded by remember { mutableStateOf(false) }
     var animationSpecValues by remember { mutableStateOf(AnimationSpecValues()) }
 
-    var viewColor by remember { mutableStateOf(Color.Blue) }
-    var viewScale by remember { mutableStateOf(0.5f) }
-
-    Box(
-        modifier = Modifier
-            .scale(viewScale)
-            .background(viewColor)
-    )
-
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -84,7 +71,7 @@ fun CrossfadeScreen(
         }
         Row(
             modifier = Modifier.fillMaxWidth().padding(Grid.One)
-                .onClick { animationSpecExpanded = !animationSpecExpanded }
+                .clickable { animationSpecExpanded = !animationSpecExpanded }
         ) {
             Icon(
                 if (animationSpecExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowRight,

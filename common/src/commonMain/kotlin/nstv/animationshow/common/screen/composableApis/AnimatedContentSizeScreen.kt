@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,7 +53,7 @@ fun AnimatedContentSizeScreen(
             Text(
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyLarge,
-                text = "Enter Transition: "
+                text = "Enter: "
             )
             DropDownWithArrows(
                 modifier = modifier.fillMaxWidth().weight(3f),
@@ -64,7 +65,7 @@ fun AnimatedContentSizeScreen(
             Text(
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyLarge,
-                text = "Exit Transition: "
+                text = "Exit: "
             )
             DropDownWithArrows(
                 modifier = modifier.fillMaxWidth().weight(3f),

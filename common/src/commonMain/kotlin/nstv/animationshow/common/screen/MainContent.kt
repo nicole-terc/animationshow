@@ -2,6 +2,7 @@ package nstv.animationshow.common.screen
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import nstv.animationshow.common.design.Grid
+import nstv.animationshow.common.design.slidesBackground
 import nstv.animationshow.common.screen.Screen.CONTENT
 import nstv.animationshow.common.screen.Screen.CONTENT_SIZE
 import nstv.animationshow.common.screen.Screen.CROSSFADE
@@ -55,6 +57,7 @@ private enum class Screen {
 }
 
 const val NumberOfColumns = 10
+const val UseSlidesBackground = false
 
 @Composable
 fun MainContent(modifier: Modifier = Modifier) {
@@ -72,6 +75,7 @@ fun MainContent(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(Grid.Two)
+                .background(if (UseSlidesBackground) slidesBackground else MaterialTheme.colorScheme.surface)
         ) {
             Box(
                 modifier = Modifier

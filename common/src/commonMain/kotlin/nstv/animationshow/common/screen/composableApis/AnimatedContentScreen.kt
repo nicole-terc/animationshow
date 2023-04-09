@@ -47,7 +47,7 @@ fun AnimatedContentScreen(
             Text(
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyLarge,
-                text = "Enter Transition: "
+                text = "Enter: "
             )
             DropDownWithArrows(
                 modifier = modifier.fillMaxWidth().weight(3f),
@@ -59,7 +59,7 @@ fun AnimatedContentScreen(
             Text(
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyLarge,
-                text = "Exit Transition: "
+                text = "Exit: "
             )
             DropDownWithArrows(
                 modifier = modifier.fillMaxWidth().weight(3f),
