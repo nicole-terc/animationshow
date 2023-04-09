@@ -7,4 +7,5 @@ object Grid {
     val One = 8.dp
     val Two = 16.dp
     val Three = 24.dp
+    val Four = 32.dp
 }

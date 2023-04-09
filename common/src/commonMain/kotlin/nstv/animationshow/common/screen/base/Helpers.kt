@@ -30,7 +30,11 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOut
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.IntOffset
+import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.screen.base.AnimationSpecType.*
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -120,4 +124,9 @@ val easings = mapOf<String, Easing>(
 val repeatableModes = mapOf<String, RepeatMode>(
     "Restart" to RepeatMode.Restart,
     "Reverse" to RepeatMode.Reverse,
+)
+
+val shapes = mapOf<String, Shape>(
+    "RoundedCorner" to RoundedCornerShape(Grid.One),
+    "Circle" to CircleShape,
 )

@@ -45,7 +45,7 @@ fun VisibilityChildrenScreen(
             exit = ExitTransition.None,
         ) {
             Column {
-                for (transitionIndex in listOf(2, 3, 7, 9)) { //2..9 step 2) {
+                for (transitionIndex in 0..4) {
                     val label =
                         "${enterTransitions.keys.toList()[transitionIndex]} + ${exitTransitions.keys.toList()[transitionIndex]}"
                     ColorScreen(

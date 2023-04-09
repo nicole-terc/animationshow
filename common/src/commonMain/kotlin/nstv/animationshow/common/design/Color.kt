@@ -4,41 +4,41 @@ import androidx.compose.ui.graphics.Color
 
 val slidesBackground = Color(0xFF4285f4)
 object TileColor {
-    val LightGray = Color(0xFFCCCCCC)
-    val DarkGray = Color(0xFF444444)
     val Blue = Color(0xFF1976D2)
     val Green = Color(0xFF3DDC84)
-    val DarkGreen = Color(0xFF24804D)
+    val Magenta = Color(0xFFC51162)
     val Yellow = Color(0xFFFFEB3B)
     val Purple = Color(0xFF6200EA)
-    val Magenta = Color(0xFFC51162)
-    val Red = Color(0xFFFF0000)
     val Orange = Color(0xFFFF9800)
+    val Red = Color(0xFFFF0000)
+    val DarkGreen = Color(0xFF24804D)
+    val LightGray = Color(0xFFCCCCCC)
+    val DarkGray = Color(0xFF444444)
 
     val list = listOf(
-        LightGray,
-        DarkGray,
         Blue,
         Green,
-        DarkGreen,
+        Magenta,
         Yellow,
         Purple,
-        Magenta,
-        Red,
         Orange,
+        Red,
+        DarkGreen,
+        LightGray,
+        DarkGray,
     )
 
     val map = mapOf<String, Color>(
-        "LightGray" to LightGray,
-        "DarkGray" to DarkGray,
         "Blue" to Blue,
         "Green" to Green,
-        "DarkGreen" to DarkGreen,
+        "Magenta" to Magenta,
         "Yellow" to Yellow,
         "Purple" to Purple,
-        "Magenta" to Magenta,
-        "Red" to Red,
         "Orange" to Orange,
+        "Red" to Red,
+        "DarkGreen" to DarkGreen,
+        "LightGray" to LightGray,
+        "DarkGray" to DarkGray,
     )
 
     fun random() = list.random()

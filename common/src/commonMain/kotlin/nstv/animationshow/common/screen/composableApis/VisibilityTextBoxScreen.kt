@@ -46,7 +46,7 @@ fun VisibilityTextBoxScreen(
     var isVisible by remember { mutableStateOf(true) }
     var enterTransitionIndex by remember { mutableStateOf(3) }
     var exitTransitionIndex by remember { mutableStateOf(3) }
-    var colorIndex by remember { mutableStateOf(3) }
+    var colorIndex by remember { mutableStateOf(1) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         Row(modifier = Modifier.fillMaxWidth()) {
