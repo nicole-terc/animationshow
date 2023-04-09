@@ -1,7 +1,6 @@
 package nstv.animationshow.common.screen.composableApis
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,8 +17,8 @@ import androidx.compose.ui.Modifier
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.screen.base.ColorScreen
-import nstv.animationshow.common.screen.enterTransitions
-import nstv.animationshow.common.screen.exitTransitions
+import nstv.animationshow.common.screen.base.enterTransitions
+import nstv.animationshow.common.screen.base.exitTransitions
 
 
 @Composable
@@ -29,6 +28,7 @@ fun VisibilityScreen(
     var isVisible by remember { mutableStateOf(true) }
     var enterTransitionIndex by remember { mutableStateOf(0) }
     var exitTransitionIndex by remember { mutableStateOf(0) }
+    var colorIndex by remember { mutableStateOf(0) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -55,6 +55,18 @@ fun VisibilityScreen(
                 onSelectionChanged = { exitTransitionIndex = it },
             )
         }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.bodyLarge,
+                text = "Color: "
+            )
+            DropDownWithArrows(
+                modifier = modifier.fillMaxWidth().weight(3f),
+                options = TileColor.map.keys.toList(),
+                onSelectionChanged = { colorIndex = it },
+            )
+        }
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
@@ -68,8 +80,11 @@ fun VisibilityScreen(
             enter = enterTransitions.values.toList()[enterTransitionIndex],
             exit = exitTransitions.values.toList()[exitTransitionIndex],
         ) {
-            ColorScreen(color = TileColor.Blue) {
-                Text("I'm visible! :D")
+            ColorScreen(color = TileColor.map.values.toList()[colorIndex]) {
+                Text(
+                    text = "I'm visible! :D",
+                    style = MaterialTheme.typography.headlineLarge,
+                )
             }
         }
     }

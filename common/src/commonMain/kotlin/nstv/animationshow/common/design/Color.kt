@@ -2,6 +2,7 @@ package nstv.animationshow.common.design
 
 import androidx.compose.ui.graphics.Color
 
+val slidesBackground = Color(0xFF4285f4)
 object TileColor {
     val LightGray = Color(0xFFCCCCCC)
     val DarkGray = Color(0xFF444444)
@@ -25,6 +26,19 @@ object TileColor {
         Magenta,
         Red,
         Orange,
+    )
+
+    val map = mapOf<String, Color>(
+        "LightGray" to LightGray,
+        "DarkGray" to DarkGray,
+        "Blue" to Blue,
+        "Green" to Green,
+        "DarkGreen" to DarkGreen,
+        "Yellow" to Yellow,
+        "Purple" to Purple,
+        "Magenta" to Magenta,
+        "Red" to Red,
+        "Orange" to Orange,
     )
 
     fun random() = list.random()

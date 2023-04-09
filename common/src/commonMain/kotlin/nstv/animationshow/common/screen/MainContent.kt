@@ -39,9 +39,9 @@ import nstv.animationshow.common.screen.composableApis.AnimatedContentScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentSizeScreen
 import nstv.animationshow.common.screen.composableApis.CrossfadeScreen
 import nstv.animationshow.common.screen.composableApis.VisibilityChildrenScreen
+import nstv.animationshow.common.screen.composableApis.VisibilityScreen
 import nstv.animationshow.common.screen.ripple.RippleGrid
 import nstv.animationshow.common.screen.squareGrid.SquareGrid
-import nstv.animationshow.common.screen.composableApis.VisibilityScreen
 
 
 private enum class Screen {

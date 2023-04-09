@@ -1,9 +1,14 @@
-package nstv.animationshow.common.screen
+package nstv.animationshow.common.screen.base
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.DurationBasedAnimationSpec
+import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.snap
@@ -26,7 +31,7 @@ import androidx.compose.animation.slideOut
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.ui.unit.IntOffset
-import nstv.animationshow.common.screen.AnimationSpecType.*
+import nstv.animationshow.common.screen.base.AnimationSpecType.*
 
 @OptIn(ExperimentalAnimationApi::class)
 val enterTransitions = mapOf(
@@ -63,7 +68,6 @@ enum class AnimationSpecType {
     Spring,
     Keyframes,
     Repeatable,
-    InfiniteRepeatable,
     Snap,
 }
 
@@ -92,3 +96,26 @@ val defaultFiniteAnimationSpec = mapOf<String, FiniteAnimationSpec<Float>>(
     "Snap" to snap(),
 )
 
+val defaultDurationBasedAnimationSpecs = mapOf<String, DurationBasedAnimationSpec<Float>>(
+    "Tween" to tween(),
+    "Keyframes" to keyframes {
+        durationMillis = 375
+        0.0f at 0 with LinearOutSlowInEasing // for 0-15 ms
+        0.2f at 15 with FastOutLinearInEasing // for 15-75 ms
+        0.4f at 75 // ms
+        0.4f at 225 // ms
+    },
+    "Snap" to snap(),
+)
+
+val easings = mapOf<String, Easing>(
+    "FastOutSlowInEasing" to FastOutSlowInEasing,
+    "LinearOutSlowInEasing" to LinearOutSlowInEasing,
+    "FastOutLinearInEasing" to FastOutLinearInEasing,
+    "LinearEasing" to LinearEasing,
+)
+
+val repeatableModes = mapOf<String, RepeatMode>(
+    "Restart" to RepeatMode.Restart,
+    "Reverse" to RepeatMode.Reverse,
+)

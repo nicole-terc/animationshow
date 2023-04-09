@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.screen.base.ColorScreen
-import nstv.animationshow.common.screen.enterTransitions
-import nstv.animationshow.common.screen.exitTransitions
+import nstv.animationshow.common.screen.base.enterTransitions
+import nstv.animationshow.common.screen.base.exitTransitions
 
 
 @OptIn(ExperimentalAnimationApi::class)

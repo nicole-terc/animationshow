@@ -40,9 +40,11 @@ fun DropDownWithArrows(
     options: List<String>,
     onSelectionChanged: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    selectedIndex: Int = 0,
+    label: String? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedItemIndex by remember { mutableStateOf(0) }
+    var selectedItemIndex by remember { mutableStateOf(selectedIndex) }
     var fromDropdown by remember { mutableStateOf(false) }
 
     Box(
@@ -51,6 +53,13 @@ fun DropDownWithArrows(
             .wrapContentSize(Alignment.TopStart)
     ) {
         Row(modifier = Modifier.fillMaxWidth().clickable { expanded = !expanded }) {
+            if (label != null) {
+                Text(
+                    modifier = Modifier.weight(2f),
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = label
+                )
+            }
             Icon(
                 Icons.Default.KeyboardArrowLeft,
                 contentDescription = "Previous Option",
@@ -70,11 +79,11 @@ fun DropDownWithArrows(
                         slideInVertically { height -> height } + fadeIn() with
                                 slideOutVertically { height -> -height } + fadeOut()
                     } else if (targetState > initialState) {
-                        slideInHorizontally { width -> width/2 } + fadeIn() with
-                                slideOutHorizontally { width -> -width/2 } + fadeOut()
+                        slideInHorizontally { width -> width / 2 } + fadeIn() with
+                                slideOutHorizontally { width -> -width / 2 } + fadeOut()
                     } else {
-                        slideInHorizontally { width -> -width/2 } + fadeIn() with
-                                slideOutHorizontally { width -> width/2 } + fadeOut()
+                        slideInHorizontally { width -> -width / 2 } + fadeIn() with
+                                slideOutHorizontally { width -> width / 2 } + fadeOut()
                     }.using(
                         SizeTransform(clip = false)
                     )

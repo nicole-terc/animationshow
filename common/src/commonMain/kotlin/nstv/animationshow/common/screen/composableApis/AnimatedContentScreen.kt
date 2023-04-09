@@ -20,9 +20,9 @@ import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.extensions.nextItemLoop
 import nstv.animationshow.common.screen.base.ColorScreen
 import nstv.animationshow.common.screen.base.LoadingScreen
+import nstv.animationshow.common.screen.base.enterTransitions
+import nstv.animationshow.common.screen.base.exitTransitions
 import nstv.animationshow.common.screen.composableApis.SubScreen.*
-import nstv.animationshow.common.screen.enterTransitions
-import nstv.animationshow.common.screen.exitTransitions
 import nstv.animationshow.common.screen.squareGrid.SquareGrid
 
 
