@@ -6,6 +6,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExitTransition.Companion
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -42,11 +43,13 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import kotlin.random.Random
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
+import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.screen.base.LoadingScreen
 import nstv.animationshow.common.screen.base.Piece
 import nstv.animationshow.common.screen.base.enterTransitions
 import nstv.animationshow.common.screen.base.exitTransitions
+import nstv.animationshow.common.screen.base.getRandomPieces
 import nstv.animationshow.common.screen.base.piePieces
 import nstv.animationshow.common.screen.composableApis.ChaosFunUiState.Content
 import nstv.animationshow.common.screen.composableApis.ChaosFunUiState.Loading
@@ -59,47 +62,34 @@ sealed interface ChaosFunUiState {
     ) : ChaosFunUiState
 }
 
+fun getRandomContent() = Content(
+    bars = getRandomPieces(),
+    pie = piePieces()
+)
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedContentChaosFunScreen(
     modifier: Modifier = Modifier,
 ) {
     var uiState by remember { mutableStateOf<ChaosFunUiState>(Loading) }
-    var enterTransitionIndex by remember { mutableStateOf(0) }
-    var exitTransitionIndex by remember { mutableStateOf(0) }
+    var alternateStates by remember { mutableStateOf(true) }
     var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
-        DropDownWithArrows(
-            modifier = modifier.fillMaxWidth(),
-            options = enterTransitions.keys.toList(),
-            onSelectionChanged = { enterTransitionIndex = it },
-            label = "Enter:"
-        )
 
-        DropDownWithArrows(
-            modifier = modifier.fillMaxWidth(),
-            options = exitTransitions.keys.toList(),
-            onSelectionChanged = { exitTransitionIndex = it },
-            label = "Exit:"
+        CheckBoxLabel(
+            text = "Alternate states",
+            checked = alternateStates,
+            onCheckedChange = { alternateStates = it }
         )
 
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 uiState = when (uiState) {
-                    is Loading -> Content(
-                        bars = List(5) {
-                            Piece(
-                                it + 1,
-                                Random.nextFloat(),
-                                color = TileColor.list[it + 1]
-                            )
-                        },
-                        pie = piePieces()
-                    )
-
-                    is Content -> Loading
+                    is Loading -> getRandomContent()
+                    is Content -> if (alternateStates) Loading else getRandomContent()
                 }
             }
         ) {
@@ -138,7 +128,7 @@ fun AnimatedContentChaosFunScreen(
                                     Box(
                                         modifier = Modifier
                                             .animateEnterExit(
-                                                enter = expandHorizontally() { -it },
+                                                enter = expandHorizontally { -it },
                                                 exit = shrinkHorizontally { -it }
                                             )
                                             .fillMaxWidth(bar.percentage)
@@ -155,6 +145,7 @@ fun AnimatedContentChaosFunScreen(
                                     }
                                 }
                             }
+
                             Box(modifier = Modifier
                                 .padding(top = Grid.Four)
                                 .fillMaxWidth(0.8f)

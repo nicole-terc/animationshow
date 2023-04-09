@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.with
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,11 +28,13 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import kotlin.random.Random
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
+import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.screen.base.LoadingScreen
 import nstv.animationshow.common.screen.base.Piece
 import nstv.animationshow.common.screen.base.enterTransitions
 import nstv.animationshow.common.screen.base.exitTransitions
+import nstv.animationshow.common.screen.base.getRandomPieces
 import nstv.animationshow.common.screen.base.piePieces
 import nstv.animationshow.common.screen.composableApis.ChaosUiState.Content
 import nstv.animationshow.common.screen.composableApis.ChaosUiState.Loading
@@ -50,6 +53,7 @@ fun AnimatedContentChaosScreen(
     modifier: Modifier = Modifier,
 ) {
     var uiState by remember { mutableStateOf<ChaosUiState>(Loading) }
+    var alternateStates by remember { mutableStateOf(true) }
     var enterTransitionIndex by remember { mutableStateOf(0) }
     var exitTransitionIndex by remember { mutableStateOf(0) }
     var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
@@ -69,35 +73,38 @@ fun AnimatedContentChaosScreen(
             label = "Exit:"
         )
 
+        CheckBoxLabel(
+            text = "Alternate states",
+            checked = alternateStates,
+            onCheckedChange = { alternateStates = it }
+        )
+
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 uiState = when (uiState) {
                     is Loading -> Content(
-                        bars = List(5) {
-                            Piece(
-                                it + 1,
-                                Random.nextFloat(),
-                                color = TileColor.list[it + 1]
-                            )
-                        },
+                        bars = getRandomPieces(),
                         pie = piePieces()
                     )
 
-                    is Content -> Loading
+                    is Content -> if (alternateStates) Loading else Content(
+                        bars = getRandomPieces(),
+                        pie = piePieces()
+                    )
                 }
             }
         ) {
             Text(text = "Click to change screen")
         }
-        AnimatedContent(
-            targetState = uiState,
-            transitionSpec = {
-                enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
-                        exitTransitions.values.toList()[exitTransitionIndex] // Exit Transition
-            },
-        ) {
-            Box(modifier = Modifier.fillMaxSize().background(backgroundColor.copy(alpha = 0.8f))) {
+        Box(modifier = Modifier.fillMaxSize().background(backgroundColor.copy(alpha = 0.8f))) {
+            AnimatedContent(
+                targetState = uiState,
+                transitionSpec = {
+                    enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                            exitTransitions.values.toList()[exitTransitionIndex] // Exit Transition
+                },
+            ) {
                 when (it) {
                     is Loading -> {
                         LoadingScreen(modifier = Modifier.fillMaxSize())

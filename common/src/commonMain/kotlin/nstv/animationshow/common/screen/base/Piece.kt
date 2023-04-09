@@ -10,6 +10,14 @@ data class Piece(
     val color: Color
 )
 
+fun getRandomPieces(size: Int = 5) = List(size) {
+    Piece(
+        it + 1,
+        Random.nextFloat(),
+        color = TileColor.list[it + 1]
+    )
+}
+
 fun piePieces(): List<Piece> {
     val pieces = mutableListOf<Piece>()
     var currentPercentage = 0f

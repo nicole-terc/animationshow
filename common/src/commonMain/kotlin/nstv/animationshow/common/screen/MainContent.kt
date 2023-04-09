@@ -32,6 +32,7 @@ import nstv.animationshow.common.design.slidesBackground
 import nstv.animationshow.common.screen.Screen.CONTENT
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS_FUN
+import nstv.animationshow.common.screen.Screen.CONTENT_CLICKER
 import nstv.animationshow.common.screen.Screen.CONTENT_SIZE
 import nstv.animationshow.common.screen.Screen.CONTENT_VISIBILITY
 import nstv.animationshow.common.screen.Screen.CROSSFADE
@@ -42,6 +43,7 @@ import nstv.animationshow.common.screen.Screen.VISIBILITY_CHILDREN
 import nstv.animationshow.common.screen.Screen.VISIBILITY_TEXT_BOX
 import nstv.animationshow.common.screen.composableApis.AnimatedContentChaosFunScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentChaosScreen
+import nstv.animationshow.common.screen.composableApis.AnimatedContentClickerScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentSizeScreen
 import nstv.animationshow.common.screen.composableApis.ContentVisibilityScreen
@@ -64,6 +66,7 @@ private enum class Screen {
     CONTENT_SIZE,
     CONTENT_CHAOS,
     CONTENT_CHAOS_FUN,
+    CONTENT_CLICKER,
     CROSSFADE,
 }
 
@@ -77,7 +80,7 @@ fun MainContent(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
     ) {
         var expanded by remember { mutableStateOf(false) }
-        var selectedScreen by remember { mutableStateOf(CONTENT_CHAOS_FUN) }
+        var selectedScreen by remember { mutableStateOf(CONTENT_CLICKER) }
 
         Column(
             modifier = Modifier
@@ -133,6 +136,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                     CONTENT_VISIBILITY -> ContentVisibilityScreen()
                     CONTENT_CHAOS -> AnimatedContentChaosScreen()
                     CONTENT_CHAOS_FUN -> AnimatedContentChaosFunScreen()
+                    CONTENT_CLICKER -> AnimatedContentClickerScreen()
                 }
             }
         }
