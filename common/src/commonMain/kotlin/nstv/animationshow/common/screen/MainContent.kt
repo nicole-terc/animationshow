@@ -32,6 +32,7 @@ import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.slidesBackground
 import nstv.animationshow.common.screen.Screen.CONTENT
 import nstv.animationshow.common.screen.Screen.CONTENT_SIZE
+import nstv.animationshow.common.screen.Screen.CONTENT_VISIBILITY
 import nstv.animationshow.common.screen.Screen.CROSSFADE
 import nstv.animationshow.common.screen.Screen.GRID
 import nstv.animationshow.common.screen.Screen.RIPPLE
@@ -42,6 +43,7 @@ import nstv.animationshow.common.screen.composableApis.AnimatedContentScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentSizeScreen
 import nstv.animationshow.common.screen.composableApis.CrossfadeScreen
 import nstv.animationshow.common.screen.composableApis.VisibilityChildrenScreen
+import nstv.animationshow.common.screen.composableApis.ContentVisibilityScreen
 import nstv.animationshow.common.screen.composableApis.VisibilityScreen
 import nstv.animationshow.common.screen.composableApis.VisibilityTextBoxScreen
 import nstv.animationshow.common.screen.ripple.RippleGrid
@@ -55,6 +57,7 @@ private enum class Screen {
     VISIBILITY_TEXT_BOX,
     VISIBILITY_CHILDREN,
     CONTENT,
+    CONTENT_VISIBILITY,
     CONTENT_SIZE,
     CROSSFADE,
 }
@@ -72,7 +75,7 @@ fun MainContent(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
     ) {
         var expanded by remember { mutableStateOf(false) }
-        var selectedScreen by remember { mutableStateOf(VISIBILITY) }
+        var selectedScreen by remember { mutableStateOf(CONTENT_VISIBILITY) }
 
         Column(
             modifier = Modifier
@@ -125,6 +128,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                     CROSSFADE -> CrossfadeScreen()
                     VISIBILITY_CHILDREN -> VisibilityChildrenScreen()
                     VISIBILITY_TEXT_BOX -> VisibilityTextBoxScreen()
+                    CONTENT_VISIBILITY -> ContentVisibilityScreen()
                 }
             }
         }
