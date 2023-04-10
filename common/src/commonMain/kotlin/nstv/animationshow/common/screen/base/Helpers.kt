@@ -9,6 +9,15 @@ import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring.DampingRatioHighBouncy
+import androidx.compose.animation.core.Spring.DampingRatioLowBouncy
+import androidx.compose.animation.core.Spring.DampingRatioMediumBouncy
+import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
+import androidx.compose.animation.core.Spring.StiffnessHigh
+import androidx.compose.animation.core.Spring.StiffnessLow
+import androidx.compose.animation.core.Spring.StiffnessMedium
+import androidx.compose.animation.core.Spring.StiffnessMediumLow
+import androidx.compose.animation.core.Spring.StiffnessVeryLow
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.repeatable
 import androidx.compose.animation.core.snap
@@ -175,6 +184,21 @@ val easings = mapOf<String, Easing>(
 val repeatableModes = mapOf<String, RepeatMode>(
     "Restart" to RepeatMode.Restart,
     "Reverse" to RepeatMode.Reverse,
+)
+
+val dampingRatioOptions = mapOf<String, Float>(
+    "No Bouncy" to DampingRatioNoBouncy,
+    "Low Bouncy" to DampingRatioLowBouncy,
+    "Medium Bouncy" to DampingRatioMediumBouncy,
+    "High Bouncy" to DampingRatioHighBouncy,
+)
+
+val stiffnessOptions = mapOf<String, Float>(
+    "VeryLow" to StiffnessVeryLow,
+    "Low" to StiffnessLow,
+    "MediumLow" to StiffnessMediumLow,
+    "Medium" to StiffnessMedium,
+    "High" to StiffnessHigh,
 )
 
 val shapes = mapOf<String, Shape>(

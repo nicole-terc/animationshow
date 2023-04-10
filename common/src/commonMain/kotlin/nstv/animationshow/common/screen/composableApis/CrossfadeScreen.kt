@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion
 import androidx.compose.ui.Modifier
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
@@ -38,13 +39,13 @@ import nstv.animationshow.common.screen.base.AnimationSpecValues
 import nstv.animationshow.common.screen.base.ColorScreen
 import nstv.animationshow.common.screen.base.defaultFiniteAnimationSpec
 import nstv.animationshow.common.screen.base.finiteAnimationSpec
-import nstv.animationshow.common.screen.composableApis.CrossfadeSubScreen.ColorSubScreenOne
-import nstv.animationshow.common.screen.composableApis.CrossfadeSubScreen.ColorSubScreenTwo
+import nstv.animationshow.common.screen.composableApis.CrossfadeScreen.ScreenOne
+import nstv.animationshow.common.screen.composableApis.CrossfadeScreen.ScreenTwo
 
 
-private enum class CrossfadeSubScreen {
-    ColorSubScreenOne,
-    ColorSubScreenTwo,
+private enum class CrossfadeScreen {
+    ScreenOne,
+    ScreenTwo,
 }
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
@@ -52,7 +53,7 @@ private enum class CrossfadeSubScreen {
 fun CrossfadeScreen(
     modifier: Modifier = Modifier,
 ) {
-    var currentSubScreen by remember { mutableStateOf(ColorSubScreenOne) }
+    var screen by remember { mutableStateOf(ScreenOne) }
     var animationSpecIndex by remember { mutableStateOf(0) }
     var useDefaultAnimations by remember { mutableStateOf(false) }
     var animationSpecExpanded by remember { mutableStateOf(false) }
@@ -107,38 +108,46 @@ fun CrossfadeScreen(
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                currentSubScreen = CrossfadeSubScreen.values().nextItemLoop(currentSubScreen)
+                screen = CrossfadeScreen.values().nextItemLoop(screen)
             }
         ) {
             Text(text = "Click to change screen")
         }
         Crossfade(
-            targetState = currentSubScreen,
+            targetState = screen,
             modifier = Modifier.fillMaxWidth(),
             animationSpec = if (useDefaultAnimations) {
                 defaultFiniteAnimationSpec.values.toList()[animationSpecIndex]
             } else {
                 animationSpecValues.getAnimationSpec(finiteAnimationSpec.values.toList()[animationSpecIndex])
             }
-        ) {
-            when (it) {
-                ColorSubScreenOne -> ColorScreen(color = TileColor.Blue) {
-                    Text(
-                        text = "Screen 1",
-                        modifier = Modifier.align(Alignment.Center),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                }
-
-                ColorSubScreenTwo -> ColorScreen(color = TileColor.Orange) {
-                    Text(
-                        text = "Screen 2",
-                        modifier = Modifier.align(Alignment.Center),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                }
+        ) { state ->
+            when (state) {
+                ScreenOne -> ScreenOne()
+                ScreenTwo -> ScreenTwo()
             }
         }
     }
 }
 
+@Composable
+private fun ScreenOne() {
+    ColorScreen(color = TileColor.BlueSlides) {
+        Text(
+            text = "Screen 1",
+            modifier = Modifier.align(Alignment.Center),
+            style = MaterialTheme.typography.headlineLarge
+        )
+    }
+}
+
+@Composable
+private fun ScreenTwo() {
+    ColorScreen(color = TileColor.Orange) {
+        Text(
+            text = "Screen 2",
+            modifier = Modifier.align(Alignment.Center),
+            style = MaterialTheme.typography.headlineLarge
+        )
+    }
+}

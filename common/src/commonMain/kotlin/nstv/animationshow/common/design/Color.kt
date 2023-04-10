@@ -3,6 +3,7 @@ package nstv.animationshow.common.design
 import androidx.compose.ui.graphics.Color
 
 val slidesBackground = Color(0xFF4285f4)
+
 object TileColor {
     val Blue = Color(0xFF1976D2)
     val Green = Color(0xFF3DDC84)
@@ -14,6 +15,7 @@ object TileColor {
     val DarkGreen = Color(0xFF24804D)
     val LightGray = Color(0xFFCCCCCC)
     val DarkGray = Color(0xFF444444)
+    val BlueSlides = Color(0xFF4285f4)
 
     val list = listOf(
         Blue,

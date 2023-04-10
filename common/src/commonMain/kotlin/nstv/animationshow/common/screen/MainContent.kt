@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color.Companion
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.design.slidesBackground
-import nstv.animationshow.common.screen.Screen.ANIMATION_SPEC_CLICKER
+import nstv.animationshow.common.screen.Screen.ANIMATION_SPEC
 import nstv.animationshow.common.screen.Screen.CONTENT
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS_FUN
@@ -65,7 +65,7 @@ private enum class Screen {
     CONTENT_CHAOS_FUN,
     CONTENT_CLICKER,
     CONTENT_NUMBER,
-    ANIMATION_SPEC_CLICKER,
+    ANIMATION_SPEC,
     CROSSFADE,
 }
 
@@ -78,7 +78,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(ANIMATION_SPEC_CLICKER) }
+        var selectedScreen by remember { mutableStateOf(ANIMATION_SPEC) }
 
         Column(
             modifier = Modifier
@@ -114,7 +114,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                     CONTENT_CHAOS_FUN -> AnimatedContentChaosFunScreen()
                     CONTENT_CLICKER -> AnimatedContentClickerScreen()
                     CONTENT_NUMBER -> AnimatedContentNumberScreen()
-                    ANIMATION_SPEC_CLICKER -> AnimationSpecScreen()
+                    ANIMATION_SPEC -> AnimationSpecScreen()
                 }
             }
         }

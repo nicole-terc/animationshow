@@ -221,21 +221,23 @@ fun SpringConfiguration(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        SliderLabelValue(
-            text = "DampingRatio:",
-            value = animationSpecValues.dampingRatio * 100f,
-            valueRange = 0f..100f,
-            onValueChange = {
-                onValuesChange(animationSpecValues.copy(dampingRatio = it / 100f))
-            }
+
+        DropDownWithArrows(
+            label = "DampingRatio:",
+            options = dampingRatioOptions.keys.toList(),
+            selectedIndex = dampingRatioOptions.values.toList().indexOf(animationSpecValues.dampingRatio),
+            onSelectionChanged = {
+                onValuesChange(animationSpecValues.copy(dampingRatio = dampingRatioOptions.values.toList()[it]))
+            },
         )
-        SliderLabelValue(
-            text = "Stiffness:",
-            value = animationSpecValues.stiffness,
-            valueRange = 0f..StiffnessHigh,
-            onValueChange = {
-                onValuesChange(animationSpecValues.copy(stiffness = it))
-            }
+
+        DropDownWithArrows(
+            label = "Stiffness:",
+            options = stiffnessOptions.keys.toList(),
+            selectedIndex = stiffnessOptions.values.toList().indexOf(animationSpecValues.stiffness),
+            onSelectionChanged = {
+                onValuesChange(animationSpecValues.copy(stiffness = stiffnessOptions.values.toList()[it]))
+            },
         )
     }
 }

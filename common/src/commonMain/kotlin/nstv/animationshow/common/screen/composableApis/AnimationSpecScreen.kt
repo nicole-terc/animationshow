@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
@@ -52,6 +54,7 @@ fun AnimationSpecScreen(
     var useDefaultAnimations by remember { mutableStateOf(false) }
     var animationSpecExpanded by remember { mutableStateOf(false) }
     var animationSpecValues by remember { mutableStateOf(AnimationSpecValues()) }
+    var emulateVisibilityChange by remember { mutableStateOf(true) }
 
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
@@ -64,7 +67,7 @@ fun AnimationSpecScreen(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(Grid.One)
+            modifier = Modifier.fillMaxWidth().padding(top = Grid.One)
                 .clickable { animationSpecExpanded = !animationSpecExpanded }
         ) {
             Icon(
@@ -77,6 +80,12 @@ fun AnimationSpecScreen(
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
+
+        CheckBoxLabel(
+            text = "Emulate Visibility Change",
+            checked = emulateVisibilityChange,
+            onCheckedChange = { emulateVisibilityChange = it }
+        )
         AnimatedVisibility(
             visible = animationSpecExpanded, modifier = Modifier.padding(Grid.One)
                 .background(
@@ -100,11 +109,16 @@ fun AnimationSpecScreen(
                     onCheckedChange = { useDefaultAnimations = it })
             }
         }
-        Box(modifier = Modifier.fillMaxSize().background(color = TileColor.Purple.copy(alpha = 0.5f))) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { tapCounter++ },
+            content = {
+                Text(text = "Change content")
+            })
 
-            val onTap: () -> Unit = {
-                tapCounter++
-            }
+        Box(modifier = Modifier.fillMaxSize().background(color = TileColor.Purple.copy(alpha = 0.5f))) {
+            val colorOne = TileColor.Yellow
+            val colorTwo = if (emulateVisibilityChange) Color.Transparent else TileColor.Blue
 
             AnimatedContent(
                 modifier = Modifier.align(Alignment.Center),
@@ -123,12 +137,12 @@ fun AnimationSpecScreen(
                         .align(Alignment.Center)
                         .size(200.dp)
                         .background(
-                            if (state % 2 == 0) TileColor.Yellow else TileColor.Blue,
+                            if (state % 2 == 0) colorOne else colorTwo,
                             shape = RoundedCornerShape(Grid.One)
                         )
                         .clip(RoundedCornerShape(Grid.One))
                         .clickable {
-                            onTap()
+                            tapCounter++
                         }
 
                 )
