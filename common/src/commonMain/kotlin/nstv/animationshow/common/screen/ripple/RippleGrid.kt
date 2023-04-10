@@ -52,6 +52,21 @@ fun RippleGrid(
     Column(modifier = modifier.fillMaxSize().onGloballyPositioned {
         size = it.size
     }) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                tileState.value = tileState.value.ripple(
+                    rippleStartPoint = IntOffset(0, 0),
+                    currentRippleDistance = currentRippleDistance
+                )
+                if (currentRippleDistance == tileGrid.size) {
+                    currentRippleDistance = 0
+                } else {
+                    currentRippleDistance++
+                }
+            }) {
+            Text("Ripple")
+        }
         AnimatedContent(targetState = tileState.value, transitionSpec = {
             fadeIn(animationSpec = tween(0, delayMillis = 0)) with
                     fadeOut(animationSpec = tween(0))
@@ -70,23 +85,6 @@ fun RippleGrid(
                 }
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                tileState.value = tileState.value.ripple(
-                    rippleStartPoint = IntOffset(0, 0),
-                    currentRippleDistance = currentRippleDistance
-                )
-                if (currentRippleDistance == tileGrid.size) {
-                    currentRippleDistance = 0
-                } else {
-                    currentRippleDistance++
-                }
-            }) {
-            Text("Ripple")
-        }
-
     }
 }
 

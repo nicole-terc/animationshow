@@ -3,23 +3,14 @@ package nstv.animationshow.common.screen
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion
 import nstv.animationshow.common.design.Grid
+import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.design.slidesBackground
+import nstv.animationshow.common.screen.Screen.ANIMATION_SPEC_CLICKER
 import nstv.animationshow.common.screen.Screen.CONTENT
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS_FUN
@@ -47,6 +40,7 @@ import nstv.animationshow.common.screen.composableApis.AnimatedContentClickerScr
 import nstv.animationshow.common.screen.composableApis.AnimatedContentNumberScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentSizeScreen
+import nstv.animationshow.common.screen.composableApis.AnimationSpecScreen
 import nstv.animationshow.common.screen.composableApis.ContentVisibilityScreen
 import nstv.animationshow.common.screen.composableApis.CrossfadeScreen
 import nstv.animationshow.common.screen.composableApis.VisibilityChildrenScreen
@@ -71,6 +65,7 @@ private enum class Screen {
     CONTENT_CHAOS_FUN,
     CONTENT_CLICKER,
     CONTENT_NUMBER,
+    ANIMATION_SPEC_CLICKER,
     CROSSFADE,
 }
 
@@ -83,8 +78,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var expanded by remember { mutableStateOf(false) }
-        var selectedScreen by remember { mutableStateOf(CONTENT_SIZE) }
+        var selectedScreen by remember { mutableStateOf(ANIMATION_SPEC_CLICKER) }
 
         Column(
             modifier = Modifier
@@ -92,38 +86,16 @@ fun MainContent(modifier: Modifier = Modifier) {
                 .padding(Grid.Two)
                 .background(if (UseSlidesBackground) slidesBackground else Companion.Unspecified)
         ) {
-            Box(
+            DropDownWithArrows(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentSize(Alignment.TopStart)
-            ) {
-                Row(modifier = Modifier.clickable { expanded = true }) {
-                    Text(
-                        text = selectedScreen.name,
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                    Icon(
-                        Icons.Default.ArrowDropDown,
-                        contentDescription = "Select Screen"
-                    )
-                }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    Screen.values().forEach { screen ->
-                        DropdownMenuItem(
-                            onClick = {
-                                expanded = false
-                                selectedScreen = screen
-                            }
-                        ) {
-                            Text(text = screen.name)
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.padding(vertical = Grid.One))
+                    .wrapContentSize(Alignment.TopStart),
+                options = Screen.values().map { it.name }.toList(),
+                selectedIndex = Screen.values().indexOf(selectedScreen),
+                onSelectionChanged = { selectedScreen = Screen.values()[it] },
+                textStyle = MaterialTheme.typography.headlineSmall,
+            )
+            Divider(modifier = Modifier.fillMaxWidth().padding(vertical = Grid.One))
             Crossfade(
                 targetState = selectedScreen,
                 animationSpec = tween(durationMillis = 500)
@@ -142,6 +114,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                     CONTENT_CHAOS_FUN -> AnimatedContentChaosFunScreen()
                     CONTENT_CLICKER -> AnimatedContentClickerScreen()
                     CONTENT_NUMBER -> AnimatedContentNumberScreen()
+                    ANIMATION_SPEC_CLICKER -> AnimationSpecScreen()
                 }
             }
         }

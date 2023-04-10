@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.design.components.SliderLabelValue
@@ -40,8 +41,8 @@ data class AnimationSpecValues(
     val easing: Easing = FastOutSlowInEasing,
 
     //Spring
-    val dampingRatio: Float = Spring.DampingRatioNoBouncy,
-    val stiffness: Float = Spring.StiffnessMedium,
+    val dampingRatio: Float = Spring.DampingRatioMediumBouncy,
+    val stiffness: Float = Spring.StiffnessMediumLow,
     val visibilityThreshold: Float? = null,
 
     //Keyframes
@@ -53,11 +54,14 @@ data class AnimationSpecValues(
         Triple(0.4f, 225, LinearEasing),
         Triple(1f, durationMillis, LinearEasing),
     ),
+    val keyFramesIntOffset: List<Triple<IntOffset, Int, Easing>> = listOf(
+        Triple(IntOffset(0, -500), 150, FastOutLinearInEasing),
+    ),
 
     //Repeatable
     val iterations: Int = 3,
     val repeatMode: RepeatMode = Restart,
-    val repeatSubAnimationSpec: DurationBasedAnimationSpec<Float> = defaultDurationBasedAnimationSpecs.values.first(),
+    val repeatSubAnimationSpecIndex: Int = 0,
     val initialStartOffset: StartOffset = StartOffset(0),
 
     //snap
@@ -79,7 +83,7 @@ data class AnimationSpecValues(
                 )
 
             Keyframes -> keyframes {
-                durationMillis = durationMillis
+                durationMillis
                 keyFrames.forEach { (fraction, duration, easing) ->
                     fraction at duration with easing
                 }
@@ -87,12 +91,48 @@ data class AnimationSpecValues(
 
             Repeatable -> repeatable(
                 iterations = iterations,
-                animation = repeatSubAnimationSpec,
+                animation = defaultDurationBasedAnimationSpecs.values.toList()[repeatSubAnimationSpecIndex],
                 repeatMode = repeatMode,
                 initialStartOffset = initialStartOffset,
             )
 
             Snap -> snap(
+                delayMillis = delayMillis,
+            )
+        }
+    }
+
+    fun getAnimationSpecIntOffset(animationSpecType: AnimationSpecType): FiniteAnimationSpec<IntOffset> {
+        return when (animationSpecType) {
+            Tween -> tween(
+                durationMillis = durationMillis,
+                delayMillis = delayMillis,
+                easing = easing,
+            )
+
+            AnimationSpecType.Spring ->
+                spring(
+                    dampingRatio = dampingRatio,
+                    stiffness = stiffness,
+                )
+
+            Keyframes -> keyframes {
+                durationMillis
+                keyFramesIntOffset.forEach { (fraction, duration, easing) ->
+                    fraction at duration with easing
+                }
+            }
+
+            Repeatable -> repeatable(
+                iterations = iterations,
+                animation = defaultDurationBasedAnimationSpecsIntOffset.values.toList()[repeatSubAnimationSpecIndex],
+                repeatMode = repeatMode,
+                initialStartOffset = initialStartOffset,
+            )
+
+            Snap
+
+            -> snap(
                 delayMillis = delayMillis,
             )
         }
@@ -227,12 +267,11 @@ fun RepeatableConfiguration(
     Column(modifier = modifier) {
         DropDownWithArrows(
             options = defaultDurationBasedAnimationSpecs.keys.toList(),
-            selectedIndex = defaultDurationBasedAnimationSpecs.values.toList()
-                .indexOf(animationSpecValues.repeatSubAnimationSpec),
+            selectedIndex = animationSpecValues.repeatSubAnimationSpecIndex,
             onSelectionChanged = {
                 onValuesChange(
                     animationSpecValues.copy(
-                        repeatSubAnimationSpec = defaultDurationBasedAnimationSpecs.values.toList()[it]
+                        repeatSubAnimationSpecIndex = it,
                     )
                 )
             },

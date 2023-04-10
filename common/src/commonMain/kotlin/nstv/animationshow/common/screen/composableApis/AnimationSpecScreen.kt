@@ -2,18 +2,22 @@ package nstv.animationshow.common.screen.composableApis
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -26,37 +30,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
-import nstv.animationshow.common.extensions.nextItemLoop
 import nstv.animationshow.common.screen.base.AnimationSpecConfiguration
 import nstv.animationshow.common.screen.base.AnimationSpecValues
-import nstv.animationshow.common.screen.base.ColorScreen
-import nstv.animationshow.common.screen.base.defaultFiniteAnimationSpec
 import nstv.animationshow.common.screen.base.finiteAnimationSpec
-import nstv.animationshow.common.screen.composableApis.CrossfadeSubScreen.ColorSubScreenOne
-import nstv.animationshow.common.screen.composableApis.CrossfadeSubScreen.ColorSubScreenTwo
 
 
-private enum class CrossfadeSubScreen {
-    ColorSubScreenOne,
-    ColorSubScreenTwo,
-}
-
-@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun CrossfadeScreen(
+fun AnimationSpecScreen(
     modifier: Modifier = Modifier,
 ) {
-    var currentSubScreen by remember { mutableStateOf(ColorSubScreenOne) }
+    var tapCounter by remember { mutableStateOf(0) }
     var animationSpecIndex by remember { mutableStateOf(0) }
     var useDefaultAnimations by remember { mutableStateOf(false) }
     var animationSpecExpanded by remember { mutableStateOf(false) }
     var animationSpecValues by remember { mutableStateOf(AnimationSpecValues()) }
+
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         DropDownWithArrows(
@@ -64,8 +60,9 @@ fun CrossfadeScreen(
             options = finiteAnimationSpec.keys.toList(),
             onSelectionChanged = { animationSpecIndex = it },
             selectedIndex = animationSpecIndex,
-            label = "Spec"
+            label = "Spec:"
         )
+
         Row(
             modifier = Modifier.fillMaxWidth().padding(Grid.One)
                 .clickable { animationSpecExpanded = !animationSpecExpanded }
@@ -103,42 +100,39 @@ fun CrossfadeScreen(
                     onCheckedChange = { useDefaultAnimations = it })
             }
         }
+        Box(modifier = Modifier.fillMaxSize().background(color = TileColor.Purple.copy(alpha = 0.5f))) {
 
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                currentSubScreen = CrossfadeSubScreen.values().nextItemLoop(currentSubScreen)
+            val onTap: () -> Unit = {
+                tapCounter++
             }
-        ) {
-            Text(text = "Click to change screen")
-        }
-        Crossfade(
-            targetState = currentSubScreen,
-            modifier = Modifier.fillMaxWidth(),
-            animationSpec = if (useDefaultAnimations) {
-                defaultFiniteAnimationSpec.values.toList()[animationSpecIndex]
-            } else {
-                animationSpecValues.getAnimationSpec(finiteAnimationSpec.values.toList()[animationSpecIndex])
-            }
-        ) {
-            when (it) {
-                ColorSubScreenOne -> ColorScreen(color = TileColor.Blue) {
-                    Text(
-                        text = "Screen 1",
-                        modifier = Modifier.align(Alignment.Center),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                }
 
-                ColorSubScreenTwo -> ColorScreen(color = TileColor.Orange) {
-                    Text(
-                        text = "Screen 2",
-                        modifier = Modifier.align(Alignment.Center),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                }
+            AnimatedContent(
+                modifier = Modifier.align(Alignment.Center),
+                targetState = tapCounter,
+                contentAlignment = Alignment.Center,
+                transitionSpec = {
+                    slideInHorizontally(
+                        animationSpec = animationSpecValues.getAnimationSpecIntOffset(finiteAnimationSpec.values.toList()[animationSpecIndex])
+                    ) { -it } with // Enter transition
+                            slideOutHorizontally { it } using SizeTransform(clip = false)
+                },
+            ) { state ->
+                Box(
+                    modifier
+                        .padding(Grid.Two)
+                        .align(Alignment.Center)
+                        .size(200.dp)
+                        .background(
+                            if (state % 2 == 0) TileColor.Yellow else TileColor.Blue,
+                            shape = RoundedCornerShape(Grid.One)
+                        )
+                        .clip(RoundedCornerShape(Grid.One))
+                        .clickable {
+                            onTap()
+                        }
+
+                )
             }
         }
     }
 }
-

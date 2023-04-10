@@ -47,7 +47,7 @@ fun VisibilityChildrenScreen(
             Column {
                 for (transitionIndex in 0..4) {
                     val label =
-                        "${enterTransitions.keys.toList()[transitionIndex]} + ${exitTransitions.keys.toList()[transitionIndex]}"
+                        "${enterTransitions.keys.toList()[transitionIndex]} & ${exitTransitions.keys.toList()[transitionIndex]}"
                     ColorScreen(
                         color = TileColor.list[transitionIndex],
                         modifier = Modifier.fillMaxWidth().weight(1f).animateEnterExit(

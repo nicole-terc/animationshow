@@ -156,6 +156,15 @@ val defaultDurationBasedAnimationSpecs = mapOf<String, DurationBasedAnimationSpe
     "Snap" to snap(),
 )
 
+val defaultDurationBasedAnimationSpecsIntOffset = mapOf<String, DurationBasedAnimationSpec<IntOffset>>(
+    "Tween" to tween(),
+    "Keyframes" to keyframes {
+        durationMillis = 375
+        IntOffset(0, -500) at 150 with FastOutSlowInEasing
+    },
+    "Snap" to snap(),
+)
+
 val easings = mapOf<String, Easing>(
     "FastOutSlowInEasing" to FastOutSlowInEasing,
     "LinearOutSlowInEasing" to LinearOutSlowInEasing,
