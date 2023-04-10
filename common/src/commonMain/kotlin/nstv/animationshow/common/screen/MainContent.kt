@@ -84,7 +84,7 @@ fun MainContent(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
     ) {
         var expanded by remember { mutableStateOf(false) }
-        var selectedScreen by remember { mutableStateOf(CONTENT_NUMBER) }
+        var selectedScreen by remember { mutableStateOf(CONTENT_CLICKER) }
 
         Column(
             modifier = Modifier

@@ -33,7 +33,6 @@ import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.screen.base.enterTransitions
-import nstv.animationshow.common.screen.base.enterTransitionsOpposite
 import nstv.animationshow.common.screen.base.exitTransitions
 import nstv.animationshow.common.screen.base.exitTransitionsOpposite
 
@@ -43,12 +42,12 @@ import nstv.animationshow.common.screen.base.exitTransitionsOpposite
 fun AnimatedContentClickerScreen(
     modifier: Modifier = Modifier,
 ) {
-    var enterTransitionIndex by remember { mutableStateOf(4) }
-    var exitTransitionIndex by remember { mutableStateOf(4) }
+    var enterTransitionIndex by remember { mutableStateOf(enterTransitions.keys.indexOf("slideIn")) }
+    var exitTransitionIndex by remember { mutableStateOf(exitTransitions.keys.indexOf("slideOut")) }
     var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
     var tapCounter by remember { mutableStateOf(0) }
     var observeColorInsteadOfTap by remember { mutableStateOf(false) }
-    var oppositeDirections by remember { mutableStateOf(false) }
+    var oppositeDirections by remember { mutableStateOf(true) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         DropDownWithArrows(
@@ -83,7 +82,7 @@ fun AnimatedContentClickerScreen(
             )
         }
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().background(color = TileColor.Magenta.copy(alpha = 0.2f))) {
 
             val onTap: () -> Unit = {
                 if (observeColorInsteadOfTap) {
@@ -112,6 +111,7 @@ fun AnimatedContentClickerScreen(
                 }
 
             } else {
+
                 AnimatedContent(
                     modifier = Modifier.align(Alignment.Center),
                     targetState = tapCounter,
@@ -122,15 +122,9 @@ fun AnimatedContentClickerScreen(
                                     exitTransitions.values.toList()[exitTransitionIndex] using // Exit Transition
                                     SizeTransform(clip = false)
                         } else {
-                            if (targetState > initialState) {
-                                enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
-                                        exitTransitionsOpposite.values.toList()[exitTransitionIndex] using // Exit Transition
-                                        SizeTransform(clip = false)
-                            } else {
-                                enterTransitionsOpposite.values.toList()[enterTransitionIndex] with // Enter transition
-                                        exitTransitions.values.toList()[exitTransitionIndex] using // Exit Transition
-                                        SizeTransform(clip = false)
-                            }
+                            enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                                    exitTransitionsOpposite.values.toList()[exitTransitionIndex] using
+                                    SizeTransform(clip = false)
                         }
                     },
                 ) { state ->
@@ -156,7 +150,7 @@ fun Clicker(
     Box(
         modifier
             .padding(Grid.Two)
-//            .size(100.dp)
+            .size(100.dp)
             // Make it grow
             .size(100.dp + tapCounter.dp)
             .background(backgroundColor, shape = CircleShape)
@@ -168,7 +162,7 @@ fun Clicker(
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = if (tapCounter == 0) "Tap me!" else "$tapCounter",
+            text = if (tapCounter == 0) "Click me!" else "$tapCounter",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
         )

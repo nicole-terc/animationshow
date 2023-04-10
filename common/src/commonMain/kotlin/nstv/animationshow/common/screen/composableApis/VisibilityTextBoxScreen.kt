@@ -59,6 +59,7 @@ fun VisibilityTextBoxScreen(
                 modifier = modifier.fillMaxWidth().weight(3f),
                 options = enterTransitions.keys.toList(),
                 onSelectionChanged = { enterTransitionIndex = it },
+                selectedIndex = enterTransitionIndex,
             )
         }
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -71,6 +72,7 @@ fun VisibilityTextBoxScreen(
                 modifier = modifier.fillMaxWidth().weight(3f),
                 options = exitTransitions.keys.toList(),
                 onSelectionChanged = { exitTransitionIndex = it },
+                selectedIndex = exitTransitionIndex,
             )
         }
         Button(
