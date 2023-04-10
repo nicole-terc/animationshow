@@ -13,7 +13,7 @@ data class Piece(
 fun getRandomPieces(size: Int = 5) = List(size) {
     Piece(
         it + 1,
-        Random.nextFloat(),
+        Random.nextFloat().coerceAtLeast(0.1f),
         color = TileColor.list[it + 1]
     )
 }

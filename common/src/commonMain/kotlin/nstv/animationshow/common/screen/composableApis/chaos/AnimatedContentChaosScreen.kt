@@ -1,22 +1,7 @@
-package nstv.animationshow.common.screen.composableApis
+package nstv.animationshow.common.screen.composableApis.chaos
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExitTransition.Companion
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -40,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Fill
-import kotlin.random.Random
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
@@ -51,32 +34,35 @@ import nstv.animationshow.common.screen.base.enterTransitions
 import nstv.animationshow.common.screen.base.exitTransitions
 import nstv.animationshow.common.screen.base.getRandomPieces
 import nstv.animationshow.common.screen.base.piePieces
-import nstv.animationshow.common.screen.composableApis.ChaosFunUiState.Content
-import nstv.animationshow.common.screen.composableApis.ChaosFunUiState.Loading
+import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Content
+import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Loading
 
-sealed interface ChaosFunUiState {
-    object Loading : ChaosFunUiState
-    data class Content(
-        val bars: List<Piece> = emptyList(),
-        val pie: List<Piece> = emptyList(),
-    ) : ChaosFunUiState
-}
-
-fun getRandomContent() = Content(
-    bars = getRandomPieces(),
-    pie = piePieces()
-)
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AnimatedContentChaosFunScreen(
+fun AnimatedContentChaosScreen(
     modifier: Modifier = Modifier,
 ) {
-    var uiState by remember { mutableStateOf<ChaosFunUiState>(Loading) }
+    var uiState by remember { mutableStateOf<ChaosUiState>(Loading) }
     var alternateStates by remember { mutableStateOf(true) }
+    var enterTransitionIndex by remember { mutableStateOf(0) }
+    var exitTransitionIndex by remember { mutableStateOf(0) }
     var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
+        DropDownWithArrows(
+            modifier = modifier.fillMaxWidth(),
+            options = enterTransitions.keys.toList(),
+            onSelectionChanged = { enterTransitionIndex = it },
+            label = "Enter:"
+        )
+
+        DropDownWithArrows(
+            modifier = modifier.fillMaxWidth(),
+            options = exitTransitions.keys.toList(),
+            onSelectionChanged = { exitTransitionIndex = it },
+            label = "Exit:"
+        )
 
         CheckBoxLabel(
             text = "Alternate states",
@@ -95,69 +81,45 @@ fun AnimatedContentChaosFunScreen(
         ) {
             Text(text = "Click to change screen")
         }
-        Box(modifier = Modifier.fillMaxSize().background(backgroundColor.copy(0.8f))) {
+        Box(modifier = Modifier.fillMaxSize().background(backgroundColor.copy(alpha = 0.8f))) {
             AnimatedContent(
                 targetState = uiState,
                 transitionSpec = {
-                    EnterTransition.None with // Enter transition
-                            ExitTransition.None // Exit Transition
+                    enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                            exitTransitions.values.toList()[exitTransitionIndex] // Exit Transition
                 },
-            ) { state ->
-                when (state) {
+            ) {
+                when (it) {
                     is Loading -> {
-                        LoadingScreen(
-                            modifier = Modifier
-                                .animateEnterExit(
-                                    enter = fadeIn(
-                                        tween(delayMillis = 200, durationMillis = 500)
-                                    ),
-                                    exit = fadeOut()
-                                )
-                        )
+                        LoadingScreen(modifier = Modifier.fillMaxSize())
                     }
 
                     is Content -> {
                         Column(
                             modifier = Modifier.fillMaxWidth().padding(vertical = Grid.Two),
+                            verticalArrangement = Arrangement.spacedBy(Grid.Half),
                         ) {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(Grid.Half),
-                                modifier = Modifier.fillMaxWidth(0.8f)
-                            ) {
-                                state.bars.forEach { bar ->
-                                    Box(
-                                        modifier = Modifier
-                                            .animateEnterExit(
-                                                enter = expandHorizontally { -it },
-                                                exit = shrinkHorizontally { -it }
-                                            )
-                                            .fillMaxWidth(bar.percentage)
-                                            .height(Grid.Four)
-                                            .background(bar.color)
-
-                                    ) {
-                                        Text(
-                                            modifier = Modifier.align(alignment = Alignment.CenterEnd)
-                                                .padding(Grid.Half),
-                                            text = "#${bar.id} Bar",
-                                            style = MaterialTheme.typography.bodyLarge,
-                                        )
-                                    }
+                            it.bars.forEach { bar ->
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(bar.percentage * 0.8f)
+                                        .height(Grid.Four)
+                                        .background(bar.color),
+                                ) {
+                                    Text(
+                                        modifier = Modifier.align(alignment = Alignment.CenterEnd).padding(Grid.Half),
+                                        text = "#${bar.id}",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                    )
                                 }
                             }
-
                             Box(modifier = Modifier
-                                .padding(top = Grid.Four)
-                                .fillMaxWidth(0.8f)
+                                .padding(Grid.Four)
                                 .aspectRatio(1f)
                                 .align(Alignment.CenterHorizontally)
-                                .animateEnterExit(
-                                    enter = scaleIn(),
-                                    exit = scaleOut(),
-                                )
                                 .drawBehind {
                                     var currentAngle = 0f
-                                    state.pie.forEach {
+                                    it.pie.forEach {
                                         val sweepAngle = 360f * it.percentage
                                         drawArc(
                                             color = it.color,
@@ -177,4 +139,3 @@ fun AnimatedContentChaosFunScreen(
         }
     }
 }
-

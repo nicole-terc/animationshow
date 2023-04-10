@@ -42,7 +42,9 @@ val enterTransitions = mapOf(
     "fadeIn + expandV" to fadeIn() + expandVertically(),
     "fadeIn + expandH" to fadeIn() + expandHorizontally { it / 2 },
     "fadeIn" to fadeIn(),
-    "scaleIn + slideInH" to scaleIn() + slideInHorizontally(),
+    "scaleIn + slideInH" to scaleIn() + slideInHorizontally { -it / 2 },
+    "scaleIn + slideInH I" to scaleIn() + slideInHorizontally { it / 2 },
+    "slideIn + fadeIn" to slideIn { IntOffset(it.width / 2, it.height / 2) } + fadeIn(),
     "slideIn" to slideIn { IntOffset(it.width / 2, it.height / 2) },
     "slideInHorizontally" to slideInHorizontally { it / 2 },
     "slideInVertically" to slideInVertically { it / 2 },
@@ -53,17 +55,53 @@ val enterTransitions = mapOf(
 )
 
 @OptIn(ExperimentalAnimationApi::class)
+val enterTransitionsOpposite = mapOf(
+    "fadeIn + expandV" to fadeIn() + expandVertically(),
+    "fadeIn + expandH" to fadeIn() + expandHorizontally { -it / 2 },
+    "fadeIn" to fadeIn(),
+    "scaleIn + slideInH" to scaleIn() + slideInHorizontally { it / 2 },
+    "scaleIn + slideInH I" to scaleIn() + slideInHorizontally { -it / 2 },
+    "slideIn + fadeIn" to slideIn { IntOffset(-it.width / 2, -it.height / 2) } + fadeIn(),
+    "slideIn" to slideIn { IntOffset(-it.width / 2, -it.height / 2) },
+    "slideInHorizontally" to slideInHorizontally { -it / 2 },
+    "slideInVertically" to slideInVertically { -it / 2 },
+    "scaleIn" to scaleIn(),
+    "expandIn" to expandIn { it / 2 },
+    "expandHorizontally" to expandHorizontally { -it / 2 },
+    "expandVertically" to expandVertically(),
+)
+
+@OptIn(ExperimentalAnimationApi::class)
 val exitTransitions = mapOf(
-    "fadeOut + shrinkV" to fadeOut() + shrinkVertically(),
+    "fadeOut + shrinkV" to fadeOut() + shrinkVertically { 0 },
     "fadeOut + shrinkH" to fadeOut() + shrinkHorizontally { it / 2 },
     "fadeOut" to fadeOut(),
-    "scaleOut + slideOutH" to scaleOut() + slideOutHorizontally(),
+    "scaleOut + slideOutH" to scaleOut() + slideOutHorizontally { -it / 2 },
+    "scaleOut + slideOutH I" to scaleOut() + slideOutHorizontally { it / 2 },
+    "slideOut + fadeOut" to slideOut { IntOffset(it.width, it.height) } + fadeOut(),
     "slideOut" to slideOut { IntOffset(it.width, it.height) },
     "slideOutHorizontally" to slideOutHorizontally { it / 2 },
     "slideOutVertically" to slideOutVertically { it / 2 },
     "scaleOut" to scaleOut(),
     "shrinkOut" to shrinkOut { it / 2 },
     "shrinkHorizontally" to shrinkHorizontally { it / 2 },
+    "shrinkVertically" to shrinkVertically(),
+)
+
+@OptIn(ExperimentalAnimationApi::class)
+val exitTransitionsOpposite = mapOf(
+    "fadeOut + shrinkV" to fadeOut() + shrinkVertically(),
+    "fadeOut + shrinkH" to fadeOut() + shrinkHorizontally { -it / 2 },
+    "fadeOut" to fadeOut(),
+    "scaleOut + slideOutH" to scaleOut() + slideOutHorizontally { it / 2 },
+    "scaleOut + slideOutH I" to scaleOut() + slideOutHorizontally { -it / 2 },
+    "slideOut + fadeOut" to slideOut { IntOffset(-it.width, -it.height) } + fadeOut(),
+    "slideOut" to slideOut { IntOffset(-it.width, -it.height) },
+    "slideOutHorizontally" to slideOutHorizontally { -it / 2 },
+    "slideOutVertically" to slideOutVertically { -it / 2 },
+    "scaleOut" to scaleOut(),
+    "shrinkOut" to shrinkOut { it / 2 },
+    "shrinkHorizontally" to shrinkHorizontally { -it / 2 },
     "shrinkVertically" to shrinkVertically(),
 )
 

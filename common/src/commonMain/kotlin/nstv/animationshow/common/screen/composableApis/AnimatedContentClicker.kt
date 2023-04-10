@@ -1,6 +1,7 @@
 package nstv.animationshow.common.screen.composableApis
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.with
@@ -32,7 +33,9 @@ import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.screen.base.enterTransitions
+import nstv.animationshow.common.screen.base.enterTransitionsOpposite
 import nstv.animationshow.common.screen.base.exitTransitions
+import nstv.animationshow.common.screen.base.exitTransitionsOpposite
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -40,11 +43,12 @@ import nstv.animationshow.common.screen.base.exitTransitions
 fun AnimatedContentClickerScreen(
     modifier: Modifier = Modifier,
 ) {
-    var enterTransitionIndex by remember { mutableStateOf(2) }
-    var exitTransitionIndex by remember { mutableStateOf(2) }
+    var enterTransitionIndex by remember { mutableStateOf(4) }
+    var exitTransitionIndex by remember { mutableStateOf(4) }
     var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
     var tapCounter by remember { mutableStateOf(0) }
     var observeColorInsteadOfTap by remember { mutableStateOf(false) }
+    var oppositeDirections by remember { mutableStateOf(false) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         DropDownWithArrows(
@@ -69,10 +73,22 @@ fun AnimatedContentClickerScreen(
             onCheckedChange = { observeColorInsteadOfTap = it }
         )
 
+        AnimatedVisibility(
+            visible = !observeColorInsteadOfTap,
+        ) {
+            CheckBoxLabel(
+                text = "Opposite directions",
+                checked = oppositeDirections,
+                onCheckedChange = { oppositeDirections = it }
+            )
+        }
+
         Box(modifier = Modifier.fillMaxSize()) {
 
             val onTap: () -> Unit = {
-                backgroundColor = TileColor.randomFilter(backgroundColor)
+                if (observeColorInsteadOfTap) {
+                    backgroundColor = TileColor.randomFilter(backgroundColor)
+                }
                 tapCounter++
             }
 
@@ -101,9 +117,21 @@ fun AnimatedContentClickerScreen(
                     targetState = tapCounter,
                     contentAlignment = Alignment.Center,
                     transitionSpec = {
-                        enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
-                                exitTransitions.values.toList()[exitTransitionIndex] using // Exit Transition
-                                SizeTransform(clip = false)
+                        if (!oppositeDirections) {
+                            enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                                    exitTransitions.values.toList()[exitTransitionIndex] using // Exit Transition
+                                    SizeTransform(clip = false)
+                        } else {
+                            if (targetState > initialState) {
+                                enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                                        exitTransitionsOpposite.values.toList()[exitTransitionIndex] using // Exit Transition
+                                        SizeTransform(clip = false)
+                            } else {
+                                enterTransitionsOpposite.values.toList()[enterTransitionIndex] with // Enter transition
+                                        exitTransitions.values.toList()[exitTransitionIndex] using // Exit Transition
+                                        SizeTransform(clip = false)
+                            }
+                        }
                     },
                 ) { state ->
                     Clicker(
@@ -128,8 +156,9 @@ fun Clicker(
     Box(
         modifier
             .padding(Grid.Two)
-            .size(100.dp)
-//            .size(100.dp + tapCounter.dp)
+//            .size(100.dp)
+            // Make it grow
+            .size(100.dp + tapCounter.dp)
             .background(backgroundColor, shape = CircleShape)
             .clip(CircleShape)
             .clickable {

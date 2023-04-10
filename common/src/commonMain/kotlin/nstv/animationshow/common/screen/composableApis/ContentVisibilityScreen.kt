@@ -4,6 +4,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope.SlideDirection
 import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.with
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import nstv.animationshow.common.design.TileColor
+import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.extensions.nextIndexLoop
 import nstv.animationshow.common.screen.base.ColorScreen
@@ -37,6 +42,7 @@ fun ContentVisibilityScreen(
     var enterTransitionIndex by remember { mutableStateOf(0) }
     var exitTransitionIndex by remember { mutableStateOf(0) }
     var colorIndex by remember { mutableStateOf(1) }
+    var useDefaultAnimation by remember { mutableStateOf(true) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -63,6 +69,12 @@ fun ContentVisibilityScreen(
                 onSelectionChanged = { exitTransitionIndex = it },
             )
         }
+        CheckBoxLabel(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Use default animation",
+            checked = useDefaultAnimation,
+            onCheckedChange = { useDefaultAnimation = it }
+        )
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
@@ -74,8 +86,14 @@ fun ContentVisibilityScreen(
         AnimatedContent(
             targetState = isVisible,
             transitionSpec = {
-                slideIntoContainer(towards = SlideDirection.Down) with // Enter transition
-                        slideOutOfContainer(towards = Companion.Up)// Exit Transition
+                if (useDefaultAnimation) {
+                    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                            scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+                            fadeOut(animationSpec = tween(90))
+                } else {
+                    slideIntoContainer(towards = SlideDirection.Down) with // Enter transition
+                            slideOutOfContainer(towards = Companion.Up)// Exit Transition
+                }
             },
         ) { state ->
             Column(modifier = Modifier.fillMaxSize()) {
