@@ -34,8 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Fill
 import nstv.animationshow.common.design.Grid
-import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
+import nstv.animationshow.common.design.slidesBackground
 import nstv.animationshow.common.screen.base.LoadingScreen
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Content
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Loading
@@ -47,7 +47,7 @@ fun AnimatedContentChaosFunScreen(
 ) {
     var uiState by remember { mutableStateOf<ChaosUiState>(Loading) }
     var alternateStates by remember { mutableStateOf(true) }
-    var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
+    var backgroundColor by remember { mutableStateOf(slidesBackground) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
 
@@ -68,7 +68,7 @@ fun AnimatedContentChaosFunScreen(
         ) {
             Text(text = "Click to change screen")
         }
-        Box(modifier = Modifier.fillMaxSize().background(backgroundColor.copy(0.8f))) {
+        Box(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
             AnimatedContent(
                 targetState = uiState,
                 transitionSpec = {
@@ -124,7 +124,7 @@ fun AnimatedContentChaosFunScreen(
                                 .aspectRatio(1f)
                                 .align(Alignment.CenterHorizontally)
                                 .animateEnterExit(
-                                    enter = scaleIn() + fadeIn(),
+                                    enter = scaleIn(tween(delayMillis = 600)) + fadeIn(tween(delayMillis = 600)),
                                     exit = scaleOut() + fadeOut(),
                                 )
                                 .drawBehind {

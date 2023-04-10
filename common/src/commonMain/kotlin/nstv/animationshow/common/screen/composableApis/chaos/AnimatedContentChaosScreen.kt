@@ -29,11 +29,8 @@ import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.screen.base.LoadingScreen
-import nstv.animationshow.common.screen.base.Piece
 import nstv.animationshow.common.screen.base.enterTransitions
 import nstv.animationshow.common.screen.base.exitTransitions
-import nstv.animationshow.common.screen.base.getRandomPieces
-import nstv.animationshow.common.screen.base.piePieces
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Content
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Loading
 
