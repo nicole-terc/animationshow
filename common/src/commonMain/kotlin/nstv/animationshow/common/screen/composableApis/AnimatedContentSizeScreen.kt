@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.IntSize
-import kotlinx.coroutines.delay
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
@@ -35,10 +34,10 @@ import nstv.animationshow.common.extensions.nextItemLoop
 import nstv.animationshow.common.screen.base.ColorScreen
 import nstv.animationshow.common.screen.base.enterTransitions
 import nstv.animationshow.common.screen.base.exitTransitions
-import nstv.animationshow.common.screen.composableApis.SubContent.*
+import nstv.animationshow.common.screen.composableApis.ScreenMode.*
 
 
-private enum class SubContent {
+private enum class ScreenMode {
     FullScreen,
     Quarter,
     HalfVertical,
@@ -50,7 +49,7 @@ private enum class SubContent {
 fun AnimatedContentSizeScreen(
     modifier: Modifier = Modifier,
 ) {
-    var currentSubScreen by remember { mutableStateOf(FullScreen) }
+    var screenMode by remember { mutableStateOf(FullScreen) }
     var enterTransitionIndex by remember { mutableStateOf(enterTransitions.keys.indexOf("fadeIn delay")) }
     var exitTransitionIndex by remember { mutableStateOf(exitTransitions.keys.indexOf("fadeOut slow")) }
     var useHalfSizes by remember { mutableStateOf(false) }
@@ -89,25 +88,25 @@ fun AnimatedContentSizeScreen(
             checked = useHalfSizes,
             onCheckedChange = {
                 useHalfSizes = it
-                currentSubScreen = Quarter
+                screenMode = FullScreen
             }
         )
 
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                currentSubScreen =
-                    if (!useHalfSizes && currentSubScreen == Quarter) {
+                screenMode =
+                    if (!useHalfSizes && screenMode == Quarter) {
                         FullScreen
                     } else {
-                        values().nextItemLoop(currentSubScreen)
+                        values().nextItemLoop(screenMode)
                     }
             }
         ) {
             Text(text = "Click to change screen")
         }
         AnimatedContent(
-            targetState = currentSubScreen,
+            targetState = screenMode,
             transitionSpec = {
                 enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
                         exitTransitions.values.toList()[exitTransitionIndex] using // Exit transition
@@ -125,17 +124,47 @@ fun AnimatedContentSizeScreen(
                             }
                         }
             },
-        ) { subContent ->
-//            val contentModifier =
-            when (subContent) {
-                FullScreen -> ColorScreen(Modifier.fillMaxSize(), color = TileColor.Purple)
-                Quarter -> ColorScreen(Modifier.fillMaxSize(0.5f), color = TileColor.Red)
-                HalfVertical -> ColorScreen(Modifier.fillMaxHeight().fillMaxWidth(0.5f), color = TileColor.Green)
-                HalfHorizontal -> ColorScreen(Modifier.fillMaxHeight(0.5f).fillMaxWidth(), color = TileColor.Blue)
+        ) { state ->
+
+            // Using different composables
+            when (state) {
+                FullScreen -> FullScreen()
+                Quarter -> Quarter()
+                HalfVertical -> HalfVertical()
+                HalfHorizontal -> HalfHorizontal()
             }
 
-//            ColorScreen(modifier = contentModifier)
+            // Using modifier
+//            val contentModifier =
+//                when (state) {
+//                    FullScreen -> Modifier.fillMaxSize()
+//                    Quarter -> Modifier.fillMaxSize(0.5f)
+//                    HalfVertical -> Modifier.fillMaxHeight().fillMaxWidth(0.5f)
+//                    HalfHorizontal -> Modifier.fillMaxHeight(0.5f).fillMaxWidth()
+//                }
+//
+//            ColorScreen(modifier = contentModifier, color = TileColor.Purple)
 
         }
     }
+}
+
+@Composable
+private fun FullScreen() {
+    ColorScreen(Modifier.fillMaxSize(), color = TileColor.Purple)
+}
+
+@Composable
+private fun Quarter() {
+    ColorScreen(Modifier.fillMaxSize(0.5f), color = TileColor.Red)
+}
+
+@Composable
+private fun HalfVertical() {
+    ColorScreen(Modifier.fillMaxHeight().fillMaxWidth(0.5f), color = TileColor.Green)
+}
+
+@Composable
+private fun HalfHorizontal() {
+    ColorScreen(Modifier.fillMaxHeight(0.5f).fillMaxWidth(), color = TileColor.Blue)
 }

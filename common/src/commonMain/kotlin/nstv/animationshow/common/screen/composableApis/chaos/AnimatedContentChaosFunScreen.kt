@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Fill
 import nstv.animationshow.common.design.Grid
+import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.slidesBackground
 import nstv.animationshow.common.screen.base.LoadingScreen
@@ -47,7 +48,7 @@ fun AnimatedContentChaosFunScreen(
 ) {
     var uiState by remember { mutableStateOf<ChaosUiState>(Loading) }
     var alternateStates by remember { mutableStateOf(true) }
-    var backgroundColor by remember { mutableStateOf(slidesBackground) }
+    var backgroundColor by remember { mutableStateOf(TileColor.BlueSlides.copy(alpha = 0.7f)) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
 

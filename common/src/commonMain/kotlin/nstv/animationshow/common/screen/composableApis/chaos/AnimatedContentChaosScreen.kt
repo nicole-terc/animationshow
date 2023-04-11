@@ -42,15 +42,16 @@ fun AnimatedContentChaosScreen(
 ) {
     var uiState by remember { mutableStateOf<ChaosUiState>(Loading) }
     var alternateStates by remember { mutableStateOf(true) }
-    var enterTransitionIndex by remember { mutableStateOf(0) }
-    var exitTransitionIndex by remember { mutableStateOf(0) }
-    var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
+    var enterTransitionIndex by remember { mutableStateOf(enterTransitions.keys.indexOf("fadeIn + expandH")) }
+    var exitTransitionIndex by remember { mutableStateOf(exitTransitions.keys.indexOf("fadeOut + shrinkH") ) }
+    var backgroundColor by remember { mutableStateOf(TileColor.BlueSlides) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         DropDownWithArrows(
             modifier = modifier.fillMaxWidth(),
             options = enterTransitions.keys.toList(),
             onSelectionChanged = { enterTransitionIndex = it },
+            selectedIndex = enterTransitionIndex,
             label = "Enter:"
         )
 
@@ -58,6 +59,7 @@ fun AnimatedContentChaosScreen(
             modifier = modifier.fillMaxWidth(),
             options = exitTransitions.keys.toList(),
             onSelectionChanged = { exitTransitionIndex = it },
+            selectedIndex = exitTransitionIndex,
             label = "Exit:"
         )
 
@@ -78,7 +80,7 @@ fun AnimatedContentChaosScreen(
         ) {
             Text(text = "Click to change screen")
         }
-        Box(modifier = Modifier.fillMaxSize().background(backgroundColor.copy(alpha = 0.8f))) {
+        Box(modifier = Modifier.fillMaxSize().background(backgroundColor.copy(alpha = 0.7f))) {
             AnimatedContent(
                 targetState = uiState,
                 transitionSpec = {

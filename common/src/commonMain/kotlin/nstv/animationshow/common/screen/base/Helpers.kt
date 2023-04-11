@@ -61,7 +61,7 @@ val enterTransitions = mapOf(
     "expandIn" to expandIn { it / 2 },
     "expandHorizontally" to expandHorizontally { it / 2 },
     "expandVertically" to expandVertically(),
-    "fadeIn delay" to fadeIn(animationSpec = tween(300, 150)),
+    "fadeIn delay" to fadeIn(tween(300, 150)),
 )
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -79,7 +79,7 @@ val enterTransitionsOpposite = mapOf(
     "expandIn" to expandIn { it / 2 },
     "expandHorizontally" to expandHorizontally { -it / 2 },
     "expandVertically" to expandVertically(),
-    "fadeIn delay" to fadeIn(animationSpec = tween(300, 150)),
+    "fadeIn delay" to fadeIn(tween(300, 150)),
 )
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -97,7 +97,7 @@ val exitTransitions = mapOf(
     "shrinkOut" to shrinkOut { it / 2 },
     "shrinkHorizontally" to shrinkHorizontally { it / 2 },
     "shrinkVertically" to shrinkVertically(),
-    "fadeOut slow" to fadeOut(animationSpec = tween(600)),
+    "fadeOut slow" to fadeOut(tween(600)),
 )
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -115,7 +115,7 @@ val exitTransitionsOpposite = mapOf(
     "shrinkOut" to shrinkOut { it / 2 },
     "shrinkHorizontally" to shrinkHorizontally { -it / 2 },
     "shrinkVertically" to shrinkVertically(),
-    "fadeOut slow" to fadeOut(animationSpec = tween(600)),
+    "fadeOut slow" to fadeOut(tween(600)),
 )
 
 // ANIMATION SPECS
