@@ -98,7 +98,7 @@ fun AnimatedContentChaosFunScreen(
                                 verticalArrangement = Arrangement.spacedBy(Grid.Half),
                                 modifier = Modifier.fillMaxWidth(0.8f)
                             ) {
-                                state.bars.forEach { bar ->
+                                state.barsPieState.bars.forEach { bar ->
                                     Box(
                                         modifier = Modifier
                                             .animateEnterExit(
@@ -130,7 +130,7 @@ fun AnimatedContentChaosFunScreen(
                                 )
                                 .drawBehind {
                                     var currentAngle = 0f
-                                    state.pie.forEach {
+                                    state.barsPieState.pie.forEach {
                                         val sweepAngle = 360f * it.percentage
                                         drawArc(
                                             color = it.color,
