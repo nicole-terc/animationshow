@@ -43,7 +43,7 @@ fun AnimatedContentChaosScreen(
     var uiState by remember { mutableStateOf<ChaosUiState>(Loading) }
     var alternateStates by remember { mutableStateOf(true) }
     var enterTransitionIndex by remember { mutableStateOf(enterTransitions.keys.indexOf("fadeIn + expandH")) }
-    var exitTransitionIndex by remember { mutableStateOf(exitTransitions.keys.indexOf("fadeOut + shrinkH") ) }
+    var exitTransitionIndex by remember { mutableStateOf(exitTransitions.keys.indexOf("fadeOut + shrinkH")) }
     var backgroundColor by remember { mutableStateOf(TileColor.BlueSlides) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
@@ -99,37 +99,12 @@ fun AnimatedContentChaosScreen(
                             verticalArrangement = Arrangement.spacedBy(Grid.Half),
                         ) {
                             it.barsPieState.bars.forEach { bar ->
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth(bar.percentage * 0.8f)
-                                        .height(Grid.Four)
-                                        .background(bar.color),
-                                ) {
-                                    Text(
-                                        modifier = Modifier.align(alignment = Alignment.CenterEnd).padding(Grid.Half),
-                                        text = "#${bar.id}",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                    )
-                                }
+                                Bar(bar)
                             }
-                            Box(modifier = Modifier
-                                .padding(Grid.Four)
-                                .aspectRatio(1f)
-                                .align(Alignment.CenterHorizontally)
-                                .drawBehind {
-                                    var currentAngle = 0f
-                                    it.barsPieState.pie.forEach {
-                                        val sweepAngle = 360f * it.percentage
-                                        drawArc(
-                                            color = it.color,
-                                            startAngle = currentAngle,
-                                            sweepAngle = sweepAngle,
-                                            useCenter = true,
-                                            style = Fill
-                                        )
-                                        currentAngle += sweepAngle
-                                    }
-                                }
+                            Pie(
+                                pieces = it.barsPieState.pie,
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
                             )
                         }
                     }

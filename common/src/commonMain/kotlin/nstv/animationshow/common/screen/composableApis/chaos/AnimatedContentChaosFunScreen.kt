@@ -38,6 +38,7 @@ import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.slidesBackground
 import nstv.animationshow.common.screen.base.LoadingScreen
+import nstv.animationshow.common.screen.base.piePieces
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Content
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Loading
 
@@ -99,49 +100,25 @@ fun AnimatedContentChaosFunScreen(
                                 modifier = Modifier.fillMaxWidth(0.8f)
                             ) {
                                 state.barsPieState.bars.forEach { bar ->
-                                    Box(
+                                    Bar(
+                                        bar = bar,
                                         modifier = Modifier
                                             .animateEnterExit(
                                                 enter = expandHorizontally(animationSpec = tween(delayMillis = bar.id * 100)) { 0 },
                                                 exit = shrinkHorizontally { 0 }
                                             )
-                                            .fillMaxWidth(bar.percentage)
-                                            .height(Grid.Four)
-                                            .background(bar.color)
-
-                                    ) {
-                                        Text(
-                                            modifier = Modifier.align(alignment = Alignment.CenterEnd)
-                                                .padding(Grid.Half),
-                                            text = "#${bar.id}",
-                                            style = MaterialTheme.typography.bodyLarge,
-                                        )
-                                    }
+                                    )
                                 }
                             }
 
-                            Box(modifier = Modifier
-                                .padding(Grid.Four)
-                                .aspectRatio(1f)
-                                .align(Alignment.CenterHorizontally)
-                                .animateEnterExit(
-                                    enter = scaleIn(tween(delayMillis = 600)) + fadeIn(tween(delayMillis = 600)),
-                                    exit = scaleOut() + fadeOut(),
-                                )
-                                .drawBehind {
-                                    var currentAngle = 0f
-                                    state.barsPieState.pie.forEach {
-                                        val sweepAngle = 360f * it.percentage
-                                        drawArc(
-                                            color = it.color,
-                                            startAngle = currentAngle,
-                                            sweepAngle = sweepAngle,
-                                            useCenter = true,
-                                            style = Fill
-                                        )
-                                        currentAngle += sweepAngle
-                                    }
-                                }
+                            Pie(
+                                pieces = state.barsPieState.pie,
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .animateEnterExit(
+                                        enter = scaleIn(tween(delayMillis = 600)) + fadeIn(tween(delayMillis = 600)),
+                                        exit = scaleOut() + fadeOut(),
+                                    )
                             )
                         }
                     }

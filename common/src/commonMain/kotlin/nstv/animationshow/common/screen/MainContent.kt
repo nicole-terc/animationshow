@@ -26,6 +26,7 @@ import nstv.animationshow.common.screen.Screen.ANIMATION_SPEC
 import nstv.animationshow.common.screen.Screen.CONTENT
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS
 import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS_FUN
+import nstv.animationshow.common.screen.Screen.CONTENT_CHAOS_LOOK
 import nstv.animationshow.common.screen.Screen.CONTENT_CLICKER
 import nstv.animationshow.common.screen.Screen.CONTENT_NUMBER
 import nstv.animationshow.common.screen.Screen.CONTENT_SIZE
@@ -35,6 +36,7 @@ import nstv.animationshow.common.screen.Screen.GRID
 import nstv.animationshow.common.screen.Screen.RIPPLE
 import nstv.animationshow.common.screen.Screen.VISIBILITY
 import nstv.animationshow.common.screen.Screen.VISIBILITY_CHILDREN
+import nstv.animationshow.common.screen.Screen.CHILDREN_ADVANCED
 import nstv.animationshow.common.screen.Screen.VISIBILITY_TEXT_BOX
 import nstv.animationshow.common.screen.composableApis.AnimatedContentClickerScreen
 import nstv.animationshow.common.screen.composableApis.AnimatedContentNumberScreen
@@ -43,10 +45,12 @@ import nstv.animationshow.common.screen.composableApis.AnimatedContentSizeScreen
 import nstv.animationshow.common.screen.composableApis.AnimationSpecScreen
 import nstv.animationshow.common.screen.composableApis.ContentVisibilityScreen
 import nstv.animationshow.common.screen.composableApis.CrossfadeScreen
-import nstv.animationshow.common.screen.composableApis.VisibilityChildrenScreen
+import nstv.animationshow.common.screen.composableApis.children.VisibilityChildrenAdvancedScreen
+import nstv.animationshow.common.screen.composableApis.children.VisibilityChildrenScreen
 import nstv.animationshow.common.screen.composableApis.VisibilityScreen
 import nstv.animationshow.common.screen.composableApis.VisibilityTextBoxScreen
 import nstv.animationshow.common.screen.composableApis.chaos.AnimatedContentChaosFunScreen
+import nstv.animationshow.common.screen.composableApis.chaos.AnimatedContentChaosLookaheadScreen
 import nstv.animationshow.common.screen.composableApis.chaos.AnimatedContentChaosScreen
 import nstv.animationshow.common.screen.ripple.RippleGrid
 import nstv.animationshow.common.screen.squareGrid.SquareGrid
@@ -58,11 +62,13 @@ private enum class Screen {
     VISIBILITY,
     VISIBILITY_TEXT_BOX,
     VISIBILITY_CHILDREN,
+    CHILDREN_ADVANCED,
     CONTENT,
     CONTENT_VISIBILITY,
     CONTENT_SIZE,
     CONTENT_CHAOS,
     CONTENT_CHAOS_FUN,
+    CONTENT_CHAOS_LOOK,
     CONTENT_CLICKER,
     CONTENT_NUMBER,
     ANIMATION_SPEC,
@@ -78,7 +84,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(CONTENT_CHAOS_FUN) }
+        var selectedScreen by remember { mutableStateOf(CHILDREN_ADVANCED) }
 
         Column(
             modifier = Modifier
@@ -108,10 +114,12 @@ fun MainContent(modifier: Modifier = Modifier) {
                     CONTENT_SIZE -> AnimatedContentSizeScreen()
                     CROSSFADE -> CrossfadeScreen()
                     VISIBILITY_CHILDREN -> VisibilityChildrenScreen()
+                    CHILDREN_ADVANCED -> VisibilityChildrenAdvancedScreen()
                     VISIBILITY_TEXT_BOX -> VisibilityTextBoxScreen()
                     CONTENT_VISIBILITY -> ContentVisibilityScreen()
                     CONTENT_CHAOS -> AnimatedContentChaosScreen()
                     CONTENT_CHAOS_FUN -> AnimatedContentChaosFunScreen()
+                    CONTENT_CHAOS_LOOK -> AnimatedContentChaosLookaheadScreen()
                     CONTENT_CLICKER -> AnimatedContentClickerScreen()
                     CONTENT_NUMBER -> AnimatedContentNumberScreen()
                     ANIMATION_SPEC -> AnimationSpecScreen()
