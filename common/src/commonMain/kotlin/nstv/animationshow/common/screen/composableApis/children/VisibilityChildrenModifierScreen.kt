@@ -1,18 +1,13 @@
 package nstv.animationshow.common.screen.composableApis.children
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope.SlideDirection
-import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
@@ -42,7 +36,7 @@ fun VisibilityChildrenAdvancedScreen(
 ) {
     var isVisible by remember { mutableStateOf(true) }
     var showText by remember { mutableStateOf(false) }
-    var independentTransitions by remember { mutableStateOf(false) }
+    var independentTransitions by remember { mutableStateOf(true) }
 
 
     val items = remember {
