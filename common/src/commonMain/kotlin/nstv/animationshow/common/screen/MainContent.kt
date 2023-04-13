@@ -84,7 +84,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(CHILDREN_ADVANCED) }
+        var selectedScreen by remember { mutableStateOf(VISIBILITY) }
 
         Column(
             modifier = Modifier

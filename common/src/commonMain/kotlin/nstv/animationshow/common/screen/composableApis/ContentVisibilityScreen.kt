@@ -42,7 +42,7 @@ fun ContentVisibilityScreen(
     var enterTransitionIndex by remember { mutableStateOf(0) }
     var exitTransitionIndex by remember { mutableStateOf(0) }
     var colorIndex by remember { mutableStateOf(1) }
-    var useDefaultAnimation by remember { mutableStateOf(true) }
+    var useDefaultAnimation by remember { mutableStateOf(false) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -98,7 +98,7 @@ fun ContentVisibilityScreen(
         ) { state ->
             Column(modifier = Modifier.fillMaxSize()) {
                 if (state) {
-                    ColorScreen(color = TileColor.map.values.toList()[colorIndex],
+                    ColorScreen(color = TileColor.map.values.toList()[colorIndex].copy(alpha = 0.8f),
                         modifier = Modifier.fillMaxSize()
                             .clickable { colorIndex = TileColor.list.nextIndexLoop(colorIndex) }) {
                         Text(

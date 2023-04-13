@@ -47,7 +47,6 @@ fun VisibilityChildrenAdvancedScreen(
                 enterTransition = enterTransitions.values.toList()[index],
                 exitTransition = exitTransitions.values.toList()[index],
             )
-
         }
     }
 

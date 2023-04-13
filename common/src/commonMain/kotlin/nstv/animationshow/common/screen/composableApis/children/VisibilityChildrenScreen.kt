@@ -37,7 +37,7 @@ fun VisibilityChildrenScreen(
 ) {
     var isVisible by remember { mutableStateOf(true) }
     var showText by remember { mutableStateOf(false) }
-    var independentTransitions by remember { mutableStateOf(false) }
+    var independentTransitions by remember { mutableStateOf(true) }
 
 
     val items = remember {

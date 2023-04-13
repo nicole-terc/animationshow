@@ -175,10 +175,10 @@ val defaultDurationBasedAnimationSpecsIntOffset = mapOf<String, DurationBasedAni
 )
 
 val easings = mapOf<String, Easing>(
-    "FastOutSlowInEasing" to FastOutSlowInEasing,
-    "LinearOutSlowInEasing" to LinearOutSlowInEasing,
-    "FastOutLinearInEasing" to FastOutLinearInEasing,
-    "LinearEasing" to LinearEasing,
+    "FastOutSlowIn" to FastOutSlowInEasing,
+    "LinearOutSlowIn" to LinearOutSlowInEasing,
+    "FastOutLinearIn" to FastOutLinearInEasing,
+    "Linear" to LinearEasing,
 )
 
 val repeatableModes = mapOf<String, RepeatMode>(
@@ -191,6 +191,7 @@ val dampingRatioOptions = mapOf<String, Float>(
     "Low Bouncy" to DampingRatioLowBouncy,
     "Medium Bouncy" to DampingRatioMediumBouncy,
     "High Bouncy" to DampingRatioHighBouncy,
+    "Very High Bouncy" to 0.05f,
 )
 
 val stiffnessOptions = mapOf<String, Float>(

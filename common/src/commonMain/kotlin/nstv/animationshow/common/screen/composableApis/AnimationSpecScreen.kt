@@ -4,6 +4,9 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.with
@@ -34,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
@@ -55,6 +59,7 @@ fun AnimationSpecScreen(
     var animationSpecExpanded by remember { mutableStateOf(false) }
     var animationSpecValues by remember { mutableStateOf(AnimationSpecValues()) }
     var emulateVisibilityChange by remember { mutableStateOf(true) }
+    var useAnimationSpecInExitTransition by remember { mutableStateOf(true) }
 
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
@@ -64,6 +69,18 @@ fun AnimationSpecScreen(
             onSelectionChanged = { animationSpecIndex = it },
             selectedIndex = animationSpecIndex,
             label = "Spec:"
+        )
+
+        CheckBoxLabel(
+            text = "Emulate Visibility Change",
+            checked = emulateVisibilityChange,
+            onCheckedChange = { emulateVisibilityChange = it }
+        )
+
+        CheckBoxLabel(
+            text = "Use Animation Spec in Exit",
+            checked = useAnimationSpecInExitTransition,
+            onCheckedChange = { useAnimationSpecInExitTransition = it }
         )
 
         Row(
@@ -80,12 +97,6 @@ fun AnimationSpecScreen(
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
-
-        CheckBoxLabel(
-            text = "Emulate Visibility Change",
-            checked = emulateVisibilityChange,
-            onCheckedChange = { emulateVisibilityChange = it }
-        )
         AnimatedVisibility(
             visible = animationSpecExpanded, modifier = Modifier.padding(Grid.One)
                 .background(
@@ -119,16 +130,20 @@ fun AnimationSpecScreen(
         Box(modifier = Modifier.fillMaxSize().background(color = TileColor.Purple.copy(alpha = 0.5f))) {
             val colorOne = TileColor.Yellow
             val colorTwo = if (emulateVisibilityChange) Color.Transparent else TileColor.Blue
-
+            val animationSpec =
+                animationSpecValues.getAnimationSpecIntOffset(finiteAnimationSpec.values.toList()[animationSpecIndex])
             AnimatedContent(
                 modifier = Modifier.align(Alignment.Center),
                 targetState = tapCounter,
                 contentAlignment = Alignment.Center,
                 transitionSpec = {
-                    slideInHorizontally(
-                        animationSpec = animationSpecValues.getAnimationSpecIntOffset(finiteAnimationSpec.values.toList()[animationSpecIndex])
-                    ) { -it } with // Enter transition
-                            slideOutHorizontally { it } using SizeTransform(clip = false)
+                    slideInHorizontally(animationSpec = animationSpec) { -it * 3 } with // Enter transition
+                            slideOutHorizontally(
+                                animationSpec = if (useAnimationSpecInExitTransition) animationSpec else spring(
+                                    stiffness = Spring.StiffnessMediumLow,
+                                    visibilityThreshold = IntOffset.VisibilityThreshold
+                                )
+                            ) { it * 3 } using SizeTransform(clip = false)
                 },
             ) { state ->
                 Box(
