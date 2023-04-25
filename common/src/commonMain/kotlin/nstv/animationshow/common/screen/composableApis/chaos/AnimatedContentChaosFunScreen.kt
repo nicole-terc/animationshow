@@ -1,26 +1,9 @@
 package nstv.animationshow.common.screen.composableApis.chaos
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.with
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
@@ -48,8 +31,9 @@ fun AnimatedContentChaosFunScreen(
     modifier: Modifier = Modifier,
 ) {
     var uiState by remember { mutableStateOf<ChaosUiState>(Loading) }
-    var alternateStates by remember { mutableStateOf(true) }
+    var alternateStates by remember { mutableStateOf(false) }
     var backgroundColor by remember { mutableStateOf(TileColor.BlueSlides.copy(alpha = 0.7f)) }
+    var withBottomBar by remember { mutableStateOf(true) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
 
@@ -64,8 +48,9 @@ fun AnimatedContentChaosFunScreen(
             onClick = {
                 uiState = when (uiState) {
                     is Loading -> getRandomContent()
-                    is Content -> if (alternateStates) Loading else getRandomContent()
+                    is Content -> if (alternateStates) Loading else getRandomContent(withBottomBar = withBottomBar)
                 }
+                withBottomBar = !withBottomBar
             }
         ) {
             Text(text = "Click to change screen")
@@ -92,34 +77,50 @@ fun AnimatedContentChaosFunScreen(
                     }
 
                     is Content -> {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = Grid.Two),
-                        ) {
+                        Box(modifier = Modifier.fillMaxSize()) {
                             Column(
-                                verticalArrangement = Arrangement.spacedBy(Grid.Half),
-                                modifier = Modifier.fillMaxWidth(0.8f)
+                                modifier = Modifier.fillMaxWidth().padding(vertical = Grid.Two),
                             ) {
-                                state.barsPieState.bars.forEach { bar ->
-                                    Bar(
-                                        bar = bar,
-                                        modifier = Modifier
-                                            .animateEnterExit(
-                                                enter = expandHorizontally(animationSpec = tween(delayMillis = bar.id * 100)) { 0 },
-                                                exit = shrinkHorizontally { 0 }
-                                            )
-                                    )
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(Grid.Half),
+                                    modifier = Modifier.fillMaxWidth(0.8f)
+                                ) {
+                                    state.barsPieState.bars.forEach { bar ->
+                                        Bar(
+                                            bar = bar,
+                                            modifier = Modifier
+                                                .animateEnterExit(
+                                                    enter = expandHorizontally(animationSpec = tween(delayMillis = bar.id * 100)) { 0 },
+                                                    exit = shrinkHorizontally { 0 }
+                                                )
+                                        )
+                                    }
                                 }
-                            }
 
-                            Pie(
-                                pieces = state.barsPieState.pie,
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .animateEnterExit(
-                                        enter = scaleIn(tween(delayMillis = 600)) + fadeIn(tween(delayMillis = 600)),
-                                        exit = scaleOut() + fadeOut(),
-                                    )
-                            )
+                                Pie(
+                                    pieces = state.barsPieState.pie,
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .animateEnterExit(
+                                            enter = scaleIn(tween(delayMillis = 600)) + fadeIn(tween(delayMillis = 600)),
+                                            exit = scaleOut() + fadeOut(),
+                                        )
+                                )
+                            }
+                            state.bottomBar?.let { bottomBar ->
+                                Text(
+                                    text = bottomBar.label,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.BottomCenter)
+                                        .animateEnterExit(
+                                            enter = slideInVertically(animationSpec = tween(delayMillis = 800) ) { it },
+                                            exit = slideOutVertically { it }
+                                        )
+                                        .background(color = bottomBar.color)
+                                        .padding(Grid.Half)
+                                )
+                            }
                         }
                     }
                 }

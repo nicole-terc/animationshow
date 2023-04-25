@@ -84,7 +84,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(VISIBILITY) }
+        var selectedScreen by remember { mutableStateOf(CONTENT_CHAOS_FUN) }
 
         Column(
             modifier = Modifier

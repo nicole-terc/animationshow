@@ -1,5 +1,7 @@
 package nstv.animationshow.common.screen.composableApis.chaos
 
+import androidx.compose.ui.graphics.Color
+import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.screen.base.Piece
 import nstv.animationshow.common.screen.base.getRandomPieces
 import nstv.animationshow.common.screen.base.piePieces
@@ -9,27 +11,31 @@ sealed interface ChaosUiState {
     object Loading : ChaosUiState
     data class Content(
         val barsPieState: BarsPieState,
+        val bottomBar: BottomBar?,
     ) : ChaosUiState
 }
+
+data class BottomBar(
+    val label: String,
+    val color: Color,
+)
 
 data class BarsPieState(
     val bars: List<Piece> = emptyList(),
     val pie: List<Piece> = emptyList(),
 )
 
-fun getRandomContent(aligned: Boolean = true) =
-    if (aligned) {
-        getRandomContentAligned()
-    } else {
-        Content(
+fun getRandomContent(aligned: Boolean = true, withBottomBar: Boolean = true) =
+    Content(
+        barsPieState = if (aligned) getAlignedBarsPie() else {
             BarsPieState(
                 bars = getRandomPieces(),
                 pie = piePieces()
             )
-        )
-    }
+        },
+        bottomBar = if (withBottomBar) defaultBottomBar() else null
+    )
 
-fun getRandomContentAligned(): Content = Content(getAlignedBarsPie())
 
 fun getAlignedBarsPie(): BarsPieState {
     val bars = getRandomPieces()
@@ -41,3 +47,6 @@ fun getAlignedBarsPie(): BarsPieState {
         pie = pieParts
     )
 }
+
+fun defaultBottomBar() = BottomBar(label = "Bottom Bar Label", color = TileColor.Purple)
+
