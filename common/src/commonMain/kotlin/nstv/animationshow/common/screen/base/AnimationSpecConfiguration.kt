@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.IntOffset
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.design.components.SliderLabelValue
+import nstv.animationshow.common.main.isDesktop
 import nstv.animationshow.common.screen.base.AnimationSpecType.Keyframes
 import nstv.animationshow.common.screen.base.AnimationSpecType.Repeatable
 import nstv.animationshow.common.screen.base.AnimationSpecType.Snap
@@ -55,7 +56,7 @@ data class AnimationSpecValues(
         Triple(1f, durationMillis, LinearEasing),
     ),
     val keyFramesIntOffset: List<Triple<IntOffset, Int, Easing>> = listOf(
-        Triple(IntOffset(0, -500), 150, FastOutLinearInEasing),
+        Triple(IntOffset(0, if (isDesktop()) -150 else -500), 150, FastOutLinearInEasing),
     ),
 
     //Repeatable
