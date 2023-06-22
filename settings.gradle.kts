@@ -15,6 +15,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "animationsshow"
+rootProject.name = "animationshow"
 
 include(":android", ":desktop", ":common")
