@@ -16,6 +16,7 @@ object TileColor {
     val LightGray = Color(0xFFCCCCCC)
     val DarkGray = Color(0xFF444444)
     val BlueSlides = Color(0xFF4285f4)
+    val PurpleSlides = Color(0xFFDDAEFC)
 
     val list = listOf(
         Blue,
