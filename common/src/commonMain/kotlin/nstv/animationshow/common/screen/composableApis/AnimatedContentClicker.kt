@@ -26,6 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import nstv.animationshow.common.design.Grid
@@ -72,15 +74,11 @@ fun AnimatedContentClickerScreen(
             onCheckedChange = { observeColorInsteadOfTap = it }
         )
 
-        AnimatedVisibility(
-            visible = !observeColorInsteadOfTap,
-        ) {
-            CheckBoxLabel(
-                text = "Opposite directions",
-                checked = oppositeDirections,
-                onCheckedChange = { oppositeDirections = it }
-            )
-        }
+        CheckBoxLabel(
+            text = "Opposite directions",
+            checked = oppositeDirections,
+            onCheckedChange = { oppositeDirections = it }
+        )
 
         Box(modifier = Modifier.fillMaxSize().background(color = TileColor.Magenta.copy(alpha = 0.2f))) {
 
@@ -97,9 +95,15 @@ fun AnimatedContentClickerScreen(
                     targetState = backgroundColor,
                     contentAlignment = Alignment.Center,
                     transitionSpec = {
-                        enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
-                                exitTransitions.values.toList()[exitTransitionIndex] using // Exit Transition
-                                SizeTransform(clip = false)
+                        if (!oppositeDirections) {
+                            enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                                    exitTransitions.values.toList()[exitTransitionIndex] using // Exit Transition
+                                    SizeTransform(clip = false)
+                        } else {
+                            enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
+                                    exitTransitionsOpposite.values.toList()[exitTransitionIndex] using
+                                    SizeTransform(clip = false)
+                        }
                     },
                 ) { state ->
                     Clicker(
@@ -152,7 +156,7 @@ fun Clicker(
             .padding(Grid.Two)
             .size(100.dp)
             // Make it grow
-            .size(100.dp + tapCounter.dp)
+//            .size(100.dp + tapCounter.dp)
             .background(backgroundColor, shape = CircleShape)
             .clip(CircleShape)
             .clickable {
@@ -164,7 +168,9 @@ fun Clicker(
             modifier = Modifier.align(Alignment.Center),
             text = if (tapCounter == 0) "Click me!" else "$tapCounter",
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge,
+            style = if (tapCounter == 0) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineMedium,
+            color = if (backgroundColor.luminance() > 0.5f) Color.Black else Color.White.copy(alpha = 0.8f),
+            fontWeight = if (tapCounter == 0) FontWeight.Normal else FontWeight.Bold,
         )
 
     }

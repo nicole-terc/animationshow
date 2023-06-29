@@ -54,7 +54,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(CONTENT_SIZE_MODIFIER) }
+        var selectedScreen by remember { mutableStateOf(CONTENT_CLICKER) }
 
         Column(
             modifier = Modifier
