@@ -13,6 +13,8 @@ fun <E> Collection<E>.previousIndexLoop(currentIndex: Int): Int = this.size.prev
 
 fun <E> List<E>.nextItemLoop(currentIndex: Int): E = this[nextIndexLoop(currentIndex)]
 
+fun <E> List<E>.nextItemLoop(currentItem: E): E = this[nextIndexLoop(this.indexOf(currentItem))]
+
 fun <E> Map<String, E>.nextItemLoop(currentIndex: Int): Pair<String, E> {
     val nextIndex: Int = this.keys.nextIndexLoop(currentIndex)
     return this.keys.elementAt(nextIndex) to this.values.elementAt(nextIndex)
