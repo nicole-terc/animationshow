@@ -37,6 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import java.lang.Integer.max
 import java.lang.Integer.min
 
+
+private enum class Direction {
+    TO_LEFT, TO_RIGHT, FROM_DROPDOWN
+}
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DropDownWithArrows(
@@ -46,10 +51,11 @@ fun DropDownWithArrows(
     selectedIndex: Int = 0,
     label: String? = null,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
+    loopSelection: Boolean = false,
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedItemIndex by remember { mutableStateOf(selectedIndex) }
-    var fromDropdown by remember { mutableStateOf(false) }
+    var direction by remember { mutableStateOf(Direction.FROM_DROPDOWN) }
 
     Box(
         modifier = modifier
@@ -70,8 +76,12 @@ fun DropDownWithArrows(
                 modifier = Modifier
                     .weight(1f)
                     .clickable(onClick = {
-                        fromDropdown = false
-                        selectedItemIndex = max(selectedItemIndex - 1, 0)
+                        direction = Direction.TO_LEFT
+                        selectedItemIndex = if (loopSelection && selectedItemIndex == 0) {
+                            options.size - 1
+                        } else {
+                            max(selectedItemIndex - 1, 0)
+                        }
                         onSelectionChanged(selectedItemIndex)
                     })
             )
@@ -79,15 +89,15 @@ fun DropDownWithArrows(
                 modifier = Modifier.weight(4f),
                 targetState = selectedItemIndex,
                 transitionSpec = {
-                    if (fromDropdown) {
-                        slideInVertically { height -> height } + fadeIn() with
+                    when (direction) {
+                        Direction.FROM_DROPDOWN -> slideInVertically { height -> height } + fadeIn() with
                                 slideOutVertically { height -> -height } + fadeOut()
-                    } else if (targetState > initialState) {
-                        slideInHorizontally { width -> width / 2 } + fadeIn() with
-                                slideOutHorizontally { width -> -width / 2 } + fadeOut()
-                    } else {
-                        slideInHorizontally { width -> -width / 2 } + fadeIn() with
+
+                        Direction.TO_LEFT -> slideInHorizontally { width -> -width / 2 } + fadeIn() with
                                 slideOutHorizontally { width -> width / 2 } + fadeOut()
+
+                        Direction.TO_RIGHT -> slideInHorizontally { width -> width / 2 } + fadeIn() with
+                                slideOutHorizontally { width -> -width / 2 } + fadeOut()
                     }.using(
                         SizeTransform(clip = false)
                     )
@@ -106,8 +116,15 @@ fun DropDownWithArrows(
                 Modifier
                     .weight(1f)
                     .clickable(onClick = {
-                        fromDropdown = false
-                        selectedItemIndex = min(selectedItemIndex + 1, options.size - 1)
+                        direction = Direction.TO_RIGHT
+
+                        selectedItemIndex =
+                            if (loopSelection && selectedItemIndex == options.size - 1) {
+                                0
+                            } else {
+                                min(selectedItemIndex + 1, options.size - 1)
+                            }
+
                         onSelectionChanged(selectedItemIndex)
                     })
             )
@@ -121,7 +138,7 @@ fun DropDownWithArrows(
                 DropdownMenuItem(
                     onClick = {
                         expanded = false
-                        fromDropdown = true
+                        direction = Direction.FROM_DROPDOWN
                         selectedItemIndex = options.indexOf(option)
                         onSelectionChanged(options.indexOf(option))
                     }

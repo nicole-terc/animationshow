@@ -26,8 +26,6 @@ import nstv.animationshow.common.screen.squareGrid.SquareGrid
 
 
 private enum class Screen {
-    GRID,
-    RIPPLE,
     VISIBILITY,
     VISIBILITY_TEXT_BOX,
     VISIBILITY_CHILDREN,
@@ -43,6 +41,9 @@ private enum class Screen {
     CONTENT_NUMBER,
     ANIMATION_SPEC,
     CROSSFADE,
+    MODIFIER_THUMBLERS,
+    GRID,
+    RIPPLE,
 }
 
 const val NumberOfColumns = 10
@@ -54,7 +55,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(CONTENT_CLICKER) }
+        var selectedScreen by remember { mutableStateOf(MODIFIER_THUMBLERS) }
 
         Column(
             modifier = Modifier
@@ -94,6 +95,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                     CONTENT_CLICKER -> AnimatedContentClickerScreen()
                     CONTENT_NUMBER -> AnimatedContentNumberScreen()
                     ANIMATION_SPEC -> AnimationSpecScreen()
+                    MODIFIER_THUMBLERS -> ModifierThumblersScreen()
                 }
             }
         }

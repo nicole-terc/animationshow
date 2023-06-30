@@ -39,16 +39,7 @@ fun VisibilityChildrenAdvancedScreen(
     var independentTransitions by remember { mutableStateOf(true) }
 
 
-    val items = remember {
-        (0..4).map { index ->
-            AnimatedItem(
-                color = TileColor.list[index],
-                label = "${enterTransitions.keys.toList()[index]} & ${exitTransitions.keys.toList()[index]}",
-                enterTransition = enterTransitions.values.toList()[index],
-                exitTransition = exitTransitions.values.toList()[index],
-            )
-        }
-    }
+    val items = remember { getDefaultAnimatedItems(5) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         CheckBoxLabel(
