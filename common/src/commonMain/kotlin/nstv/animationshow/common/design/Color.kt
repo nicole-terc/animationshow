@@ -29,6 +29,8 @@ object TileColor {
         DarkGreen,
         LightGray,
         DarkGray,
+        BlueSlides,
+        PurpleSlides,
     )
 
     val map = mapOf<String, Color>(
@@ -42,6 +44,8 @@ object TileColor {
         "DarkGreen" to DarkGreen,
         "LightGray" to LightGray,
         "DarkGray" to DarkGray,
+        "BlueSlides" to BlueSlides,
+        "PurpleSlides" to PurpleSlides,
     )
 
     fun random() = list.random()

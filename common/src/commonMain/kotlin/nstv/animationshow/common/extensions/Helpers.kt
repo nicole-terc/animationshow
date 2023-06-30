@@ -1,6 +1,7 @@
 package nstv.animationshow.common.extensions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
@@ -15,3 +16,10 @@ fun IntSize.toDpSizeSquared(): DpSize {
         )
     }
 }
+
+fun Color.getInverseColor() = Color(
+    red = 1f - red,
+    green = 1f - green,
+    blue = 1f - blue,
+    alpha = alpha
+)
