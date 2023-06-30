@@ -40,6 +40,7 @@ fun AnimatedContentClickerScreen(
     var enterTransitionIndex by remember { mutableStateOf(enterTransitions.keys.indexOf("slideIn")) }
     var exitTransitionIndex by remember { mutableStateOf(exitTransitions.keys.indexOf("slideOut")) }
     var oppositeDirections by remember { mutableStateOf(true) }
+    var clipBounds by remember { mutableStateOf(false) }
 
     var backgroundColor by remember { mutableStateOf(TileColor.list.first()) }
     var tapCounter by remember { mutableStateOf(0) }
@@ -90,6 +91,12 @@ fun AnimatedContentClickerScreen(
                 )
 
                 CheckBoxLabel(
+                    text = "Clip bounds",
+                    checked = clipBounds,
+                    onCheckedChange = { clipBounds = it }
+                )
+
+                CheckBoxLabel(
                     text = "Observe tap",
                     checked = observeTap,
                     onCheckedChange = { observeTap = it }
@@ -117,6 +124,7 @@ fun AnimatedContentClickerScreen(
                         .padding(Grid.Half),
                     onClick = {
                         tapCounter = 0
+                        backgroundColor = TileColor.list.first()
                         if (observeTap) {
                             clickerState = ClickerState(backgroundColor, tapCounter)
                         }
@@ -148,7 +156,7 @@ fun AnimatedContentClickerScreen(
                     } else {
                         enterTransitions.values.toList()[enterTransitionIndex] with // Enter transition
                                 exitTransitionsOpposite.values.toList()[exitTransitionIndex] using
-                                SizeTransform(clip = false)
+                                SizeTransform(clip = clipBounds)
                     }
                 },
             ) { state ->
