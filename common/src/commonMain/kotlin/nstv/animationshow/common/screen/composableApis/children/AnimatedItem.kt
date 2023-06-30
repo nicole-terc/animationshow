@@ -14,6 +14,7 @@ data class AnimatedItem(
     val enterTransition: EnterTransition,
     val exitTransition: ExitTransition,
     val expanded: Boolean = false,
+    val showChildren: Boolean = false,
 )
 
 fun getDefaultAnimatedItems(count: Int = 5): List<AnimatedItem> =
