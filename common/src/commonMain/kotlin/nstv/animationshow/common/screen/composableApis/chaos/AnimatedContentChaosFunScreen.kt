@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,14 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.drawscope.Fill
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
-import nstv.animationshow.common.design.slidesBackground
 import nstv.animationshow.common.screen.base.LoadingScreen
-import nstv.animationshow.common.screen.base.piePieces
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Content
 import nstv.animationshow.common.screen.composableApis.chaos.ChaosUiState.Loading
 

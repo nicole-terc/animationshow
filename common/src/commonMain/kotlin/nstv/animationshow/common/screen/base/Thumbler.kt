@@ -1,13 +1,11 @@
-package nstv.animationshow.common.screen.composableApis.children
+package nstv.animationshow.common.screen.base
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.ui.graphics.Color
 import nstv.animationshow.common.design.TileColor
-import nstv.animationshow.common.screen.base.enterTransitions
-import nstv.animationshow.common.screen.base.exitTransitions
 
-data class AnimatedItem(
+data class Thumbler(
     val key: Int,
     val color: Color,
     val label: String,
@@ -17,12 +15,12 @@ data class AnimatedItem(
     val showChildren: Boolean = false,
 )
 
-fun getDefaultAnimatedItems(count: Int = 5): List<AnimatedItem> =
-    (0 until count).map { index -> getDefaultAnimatedItem(index) }
+fun getThumblerList(count: Int = 5): List<Thumbler> =
+    (0 until count).map { index -> getThumbler(index) }
 
-fun getDefaultAnimatedItem(key: Int): AnimatedItem {
+fun getThumbler(key: Int): Thumbler {
     val index = key % TileColor.list.size
-    return AnimatedItem(
+    return Thumbler(
         key = key,
         color = TileColor.list[index],
         label = "${enterTransitions.keys.toList()[index]} & ${exitTransitions.keys.toList()[index]}",

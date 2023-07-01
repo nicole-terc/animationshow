@@ -1,6 +1,7 @@
 package nstv.animationshow.common.screen.composableApis
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -42,21 +43,24 @@ import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.extensions.getInverseColor
-import nstv.animationshow.common.screen.composableApis.children.getDefaultAnimatedItem
-import nstv.animationshow.common.screen.composableApis.children.getDefaultAnimatedItems
+import nstv.animationshow.common.screen.base.getThumbler
+import nstv.animationshow.common.screen.base.getThumblerList
 
 
-private val columnOptions = listOf(1, 2, 3)
+private val columnOptions = listOf(1, 2, 3, 4)
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun ModifierThumblersScreen(
     modifier: Modifier = Modifier,
 ) {
-    var items by remember { mutableStateOf(getDefaultAnimatedItems(6)) }
+    var items by remember { mutableStateOf(getThumblerList(6)) }
+    val inceptionItems by remember { mutableStateOf(getThumblerList(5).filter { it.key != 2 }) }
+
     var columns by remember { mutableStateOf(2) }
+    var showChildren by remember { mutableStateOf(true) }
     var independentChildren by remember { mutableStateOf(true) }
-    val inceptionItems by remember { mutableStateOf(getDefaultAnimatedItems(5).filter { it.key != 2 }) }
+    var moreOptionsExpanded by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         DropDownWithArrows(
@@ -92,7 +96,7 @@ fun ModifierThumblersScreen(
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.secondaryContainer),
                 onClick = {
-                    items = items.toMutableList().apply { add(getDefaultAnimatedItem(items.size)) }
+                    items = items.toMutableList().apply { add(getThumbler(items.size)) }
                 }
             ) {
                 Text(text = "+", color = MaterialTheme.colorScheme.onSecondaryContainer)
@@ -100,12 +104,45 @@ fun ModifierThumblersScreen(
             Spacer(modifier = Modifier.weight(0.5f))
         }
 
-        CheckBoxLabel(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Independent Children",
-            checked = independentChildren,
-            onCheckedChange = { independentChildren = it }
+        androidx.compose.material.Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Grid.Half)
+                .clickable { moreOptionsExpanded = !moreOptionsExpanded },
+            text = "More options" + if (moreOptionsExpanded) " ▲" else " ▼",
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyLarge,
         )
+
+        AnimatedVisibility(
+            visible = moreOptionsExpanded
+        ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+
+                CheckBoxLabel(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Show Children",
+                    checked = showChildren,
+                    onCheckedChange = { showChildren = it },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                )
+
+                AnimatedVisibility(
+                    visible = showChildren,
+                    enter = slideInHorizontally(initialOffsetX = { it }),
+                    exit = fadeOut(),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CheckBoxLabel(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Independent Children",
+                        checked = independentChildren,
+                        onCheckedChange = { independentChildren = it },
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
+        }
 
         Button(modifier = Modifier.fillMaxWidth(), onClick = { items = items.shuffled() }) {
             Text(text = "Shuffle items!", color = MaterialTheme.colorScheme.onSecondary)
@@ -140,39 +177,41 @@ fun ModifierThumblersScreen(
                         )
                         .height(if (item.expanded) 200.dp else 100.dp)
                 ) {
-                    AnimatedContent(
-                        targetState = item.showChildren,
-                        transitionSpec = {
-                            if (independentChildren) {
-                                EnterTransition.None with ExitTransition.None
-                            } else {
-                                slideInHorizontally(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) with fadeOut()
-                            }
-                        }
-                    ) { show ->
-                        if (show) {
-                            Column(modifier = Modifier.fillMaxSize().padding(Grid.One)) {
-                                inceptionItems.forEach { childItem ->
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .weight(1f)
-                                            .padding(Grid.Half)
-                                            .animateEnterExit(
-                                                enter = if (independentChildren) childItem.enterTransition else EnterTransition.None,
-                                                exit = if (independentChildren) childItem.exitTransition else ExitTransition.None,
-                                                label = childItem.label
-                                            )
-                                            .background(
-                                                color = item.color.getInverseColor().copy(alpha = 0.8f),
-                                                shape = RoundedCornerShape(Grid.Quarter),
-                                            )
-
-                                    )
+                    if (showChildren) {
+                        AnimatedContent(
+                            targetState = item.showChildren,
+                            transitionSpec = {
+                                if (independentChildren) {
+                                    EnterTransition.None with ExitTransition.None
+                                } else {
+                                    slideInHorizontally(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) with fadeOut()
                                 }
                             }
-                        } else {
-                            Column(Modifier.fillMaxSize()) { }
+                        ) { show ->
+                            if (show) {
+                                Column(modifier = Modifier.fillMaxSize().padding(Grid.One)) {
+                                    inceptionItems.forEach { childItem ->
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .weight(1f)
+                                                .padding(Grid.Half)
+                                                .animateEnterExit(
+                                                    enter = if (independentChildren) childItem.enterTransition else EnterTransition.None,
+                                                    exit = if (independentChildren) childItem.exitTransition else ExitTransition.None,
+                                                    label = childItem.label
+                                                )
+                                                .background(
+                                                    color = item.color.getInverseColor().copy(alpha = 0.8f),
+                                                    shape = RoundedCornerShape(Grid.Quarter),
+                                                )
+
+                                        )
+                                    }
+                                }
+                            } else {
+                                Column(Modifier.fillMaxSize()) { }
+                            }
                         }
                     }
                 }

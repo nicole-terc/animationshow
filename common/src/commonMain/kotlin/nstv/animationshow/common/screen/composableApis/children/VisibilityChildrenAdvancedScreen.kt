@@ -23,11 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import nstv.animationshow.common.design.TileColor
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.screen.base.ColorScreen
-import nstv.animationshow.common.screen.base.enterTransitions
-import nstv.animationshow.common.screen.base.exitTransitions
+import nstv.animationshow.common.screen.base.getThumblerList
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -39,7 +37,7 @@ fun VisibilityChildrenAdvancedScreen(
     var independentTransitions by remember { mutableStateOf(true) }
 
 
-    val items = remember { getDefaultAnimatedItems(5) }
+    val items = remember { getThumblerList(5) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Bottom) {
         CheckBoxLabel(
