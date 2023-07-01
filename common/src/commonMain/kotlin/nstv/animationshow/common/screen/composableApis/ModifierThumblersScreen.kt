@@ -27,8 +27,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,7 +96,7 @@ fun ModifierThumblersScreen(
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.secondaryContainer),
                 onClick = {
-                    items = items.toMutableList().apply { add(getThumbler(items.size)) }
+                    items = items.toMutableList().apply { add(index = 0, getThumbler(items.size)) }
                 }
             ) {
                 Text(text = "+", color = MaterialTheme.colorScheme.onSecondaryContainer)
@@ -104,7 +104,7 @@ fun ModifierThumblersScreen(
             Spacer(modifier = Modifier.weight(0.5f))
         }
 
-        androidx.compose.material.Text(
+        Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Grid.Half)
@@ -145,7 +145,7 @@ fun ModifierThumblersScreen(
         }
 
         Button(modifier = Modifier.fillMaxWidth(), onClick = { items = items.shuffled() }) {
-            Text(text = "Shuffle items!", color = MaterialTheme.colorScheme.onSecondary)
+            Text(text = "Shuffle items!")
         }
 
         LazyVerticalGrid(modifier = Modifier.fillMaxSize(), columns = GridCells.Fixed(columns)) {
