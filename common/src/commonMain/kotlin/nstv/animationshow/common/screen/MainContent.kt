@@ -26,24 +26,25 @@ import nstv.animationshow.common.screen.squareGrid.SquareGrid
 
 
 private enum class Screen {
-    VISIBILITY,
-    VISIBILITY_TEXT_BOX,
-    VISIBILITY_CHILDREN,
-    CHILDREN_ADVANCED,
-    CONTENT,
-    CONTENT_VISIBILITY,
-    CONTENT_SIZE,
-    CONTENT_SIZE_MODIFIER,
-    CONTENT_CHAOS,
-    CONTENT_CHAOS_FUN,
-    CONTENT_CHAOS_LOOK,
-    CONTENT_CLICKER,
-    CONTENT_NUMBER,
-    ANIMATION_SPEC,
-    CROSSFADE,
-    MODIFIER_THUMBLERS,
-    GRID,
-    RIPPLE,
+    EXAMPLE_SIZE_CHANGER,
+    CURTAIN_ANIM_VISIBILITY,
+    ANIMATION_SPEC_TWEENS,
+    CONDUCTOR_CROSSFADE,
+    P_0_CURTAIN,
+    P_1_CLICKER,
+    P_2_SIZE_SHIFTER,
+    P_3_MODIFIER_THUMBLERS,
+    EXTRA_TWEENS,
+    EXTRA_BUBBLES,
+    EXTRA_HAPPY_BARS,
+    EXTRA_GRAPHS,
+    NO_SHOW_GRID,
+    NO_SHOW_RIPPLE,
+    NO_SHOW_CONTENT_SWAP,
+    NO_SHOW_CURTAIN_V2,
+    NO_SHOW_GRAPHS_BORING,
+    WIP_CHILDREN_ADVANCED,
+    WIP_GRAPHS_LOOKAHEAD,
 }
 
 const val NumberOfColumns = 10
@@ -55,7 +56,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(MODIFIER_THUMBLERS) }
+        var selectedScreen by remember { mutableStateOf(P_3_MODIFIER_THUMBLERS) }
 
         Column(
             modifier = Modifier
@@ -78,24 +79,25 @@ fun MainContent(modifier: Modifier = Modifier) {
                 animationSpec = tween(durationMillis = 500)
             ) { screen ->
                 when (screen) {
-                    GRID -> SquareGrid(numberOfColumns = NumberOfColumns)
-                    RIPPLE -> RippleGrid(numberOfColumns = NumberOfColumns)
-                    VISIBILITY -> VisibilityScreen()
-                    CONTENT -> AnimatedContentScreen()
-                    CONTENT_SIZE -> AnimatedContentSizeScreen()
-                    CONTENT_SIZE_MODIFIER -> ContentSizeModifierScreen()
-                    CROSSFADE -> CrossfadeScreen()
-                    VISIBILITY_CHILDREN -> VisibilityChildrenScreen()
-                    CHILDREN_ADVANCED -> VisibilityChildrenAdvancedScreen()
-                    VISIBILITY_TEXT_BOX -> VisibilityTextBoxScreen()
-                    CONTENT_VISIBILITY -> ContentVisibilityScreen()
-                    CONTENT_CHAOS -> AnimatedContentChaosScreen()
-                    CONTENT_CHAOS_FUN -> AnimatedContentChaosFunScreen()
-                    CONTENT_CHAOS_LOOK -> AnimatedContentChaosLookaheadScreen()
-                    CONTENT_CLICKER -> AnimatedContentClickerScreen()
-                    CONTENT_NUMBER -> AnimatedContentNumberScreen()
-                    ANIMATION_SPEC -> AnimationSpecScreen()
-                    MODIFIER_THUMBLERS -> ModifierThumblersScreen()
+                    EXAMPLE_SIZE_CHANGER -> ContentSizeModifierScreen()
+                    CURTAIN_ANIM_VISIBILITY -> VisibilityScreen()
+                    ANIMATION_SPEC_TWEENS -> AnimationSpecScreen()
+                    CONDUCTOR_CROSSFADE -> CrossfadeScreen()
+                    P_0_CURTAIN -> ContentVisibilityScreen()
+                    P_1_CLICKER -> AnimatedContentClickerScreen()
+                    P_2_SIZE_SHIFTER -> AnimatedContentSizeScreen()
+                    P_3_MODIFIER_THUMBLERS -> ModifierThumblersScreen()
+                    EXTRA_TWEENS -> AnimationSpecScreen()
+                    EXTRA_BUBBLES -> AnimatedContentNumberScreen()
+                    EXTRA_HAPPY_BARS -> VisibilityChildrenScreen()
+                    EXTRA_GRAPHS -> AnimatedContentChaosFunScreen()
+                    NO_SHOW_CURTAIN_V2 -> VisibilityTextBoxScreen()
+                    NO_SHOW_GRAPHS_BORING -> AnimatedContentChaosScreen()
+                    NO_SHOW_GRID -> SquareGrid(numberOfColumns = NumberOfColumns)
+                    NO_SHOW_RIPPLE -> RippleGrid(numberOfColumns = NumberOfColumns)
+                    NO_SHOW_CONTENT_SWAP -> AnimatedContentScreen()
+                    WIP_CHILDREN_ADVANCED -> VisibilityChildrenAdvancedScreen() // Same as VisibilityChildrenScreen() for now
+                    WIP_GRAPHS_LOOKAHEAD -> AnimatedContentChaosLookaheadScreen() // Does Nothing atm
                 }
             }
         }
