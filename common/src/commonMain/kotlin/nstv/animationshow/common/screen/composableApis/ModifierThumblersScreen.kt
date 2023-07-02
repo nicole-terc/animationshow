@@ -1,6 +1,5 @@
 package nstv.animationshow.common.screen.composableApis
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -8,9 +7,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,7 +58,7 @@ fun ModifierThumblersScreen(
     modifier: Modifier = Modifier,
 ) {
     var items by remember { mutableStateOf(getThumblerList(6)) }
-    val inceptionItems by remember { mutableStateOf(getThumblerList(5).filter { it.key != 2 }) }
+    val inceptionItems by remember { mutableStateOf(getThumblerList(5).filter { it.id != 2 }) }
 
     var columns by remember { mutableStateOf(2) }
     var showChildren by remember { mutableStateOf(true) }
@@ -81,7 +84,7 @@ fun ModifierThumblersScreen(
             Button(
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.secondaryContainer),
-                onClick = { items = items.toMutableList().apply { removeIf { it.key == items.size - 1 } } }
+                onClick = { items = items.toMutableList().apply { removeIf { it.id == items.size - 1 } } }
             ) {
                 Text(text = "-", color = MaterialTheme.colorScheme.onSecondaryContainer)
             }
@@ -149,8 +152,9 @@ fun ModifierThumblersScreen(
         }
 
         LazyVerticalGrid(modifier = Modifier.fillMaxSize(), columns = GridCells.Fixed(columns)) {
-            items(count = items.size, key = { items[it].key }) { index ->
+            items(count = items.size, key = { items[it].id }) { index ->
                 val item = items[index]
+                // Thumbler View
                 Column(
                     modifier = Modifier
                         .padding(Grid.Half)
@@ -160,12 +164,14 @@ fun ModifierThumblersScreen(
                                 this[index] = item.copy(expanded = !item.expanded, showChildren = false)
                             }
                         }
+                        // NicNote: Needs to be inside a LazyLayout to work
                         .animateItemPlacement(
                             animationSpec = spring(
                                 dampingRatio = Spring.DampingRatioMediumBouncy,
                                 stiffness = Spring.StiffnessMediumLow
                             )
                         )
+                        // NicNote: Needs to be before size modifiers, but after any other graphic layer modifiers
                         .animateContentSize(
                             finishedListener = { initialValue, targetValue ->
                                 if (targetValue.height > initialValue.height) {
@@ -178,39 +184,30 @@ fun ModifierThumblersScreen(
                         .height(if (item.expanded) 200.dp else 100.dp)
                 ) {
                     if (showChildren) {
-                        AnimatedContent(
-                            targetState = item.showChildren,
-                            transitionSpec = {
-                                if (independentChildren) {
-                                    EnterTransition.None with ExitTransition.None
-                                } else {
-                                    slideInHorizontally(spring(dampingRatio = Spring.DampingRatioMediumBouncy)) with fadeOut()
-                                }
-                            }
-                        ) { show ->
-                            if (show) {
-                                Column(modifier = Modifier.fillMaxSize().padding(Grid.One)) {
-                                    inceptionItems.forEach { childItem ->
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .weight(1f)
-                                                .padding(Grid.Half)
-                                                .animateEnterExit(
-                                                    enter = if (independentChildren) childItem.enterTransition else EnterTransition.None,
-                                                    exit = if (independentChildren) childItem.exitTransition else ExitTransition.None,
-                                                    label = childItem.label
-                                                )
-                                                .background(
-                                                    color = item.color.getInverseColor().copy(alpha = 0.8f),
-                                                    shape = RoundedCornerShape(Grid.Quarter),
-                                                )
+                        AnimatedVisibility(
+                            visible = item.showChildren,
+                            enter = if (independentChildren) EnterTransition.None else fadeIn() + expandVertically(),
+                            exit = if (independentChildren) ExitTransition.None else fadeOut() + shrinkVertically(),
+                        ) {
+                            Column(modifier = Modifier.fillMaxSize().padding(Grid.One)) {
+                                inceptionItems.forEach { childItem ->
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .weight(1f)
+                                            .padding(Grid.Half)
+                                            .animateEnterExit(
+                                                enter = if (independentChildren) fadeIn() + expandIn() else EnterTransition.None,
+                                                exit = if (independentChildren) fadeOut() + shrinkOut() else ExitTransition.None,
+                                                label = childItem.label
+                                            )
+                                            .background(
+                                                color = item.color.getInverseColor().copy(alpha = 0.8f),
+                                                shape = RoundedCornerShape(Grid.Quarter),
+                                            )
 
-                                        )
-                                    }
+                                    )
                                 }
-                            } else {
-                                Column(Modifier.fillMaxSize()) { }
                             }
                         }
                     }

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 import nstv.animationshow.common.design.TileColor
 
 data class Thumbler(
-    val key: Int,
+    val id: Int,
     val color: Color,
     val label: String,
     val enterTransition: EnterTransition,
@@ -21,7 +21,7 @@ fun getThumblerList(count: Int = 5): List<Thumbler> =
 fun getThumbler(key: Int): Thumbler {
     val index = key % TileColor.list.size
     return Thumbler(
-        key = key,
+        id = key,
         color = TileColor.list[index],
         label = "${enterTransitions.keys.toList()[index]} & ${exitTransitions.keys.toList()[index]}",
         enterTransition = enterTransitions.values.toList()[index],
