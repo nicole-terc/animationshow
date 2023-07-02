@@ -43,7 +43,7 @@ private enum class ScreenMode {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AnimatedContentSizeScreen(
+fun AnimatedContentSizeShifter(
     modifier: Modifier = Modifier,
 ) {
     var screenMode by remember { mutableStateOf(FullScreen) }

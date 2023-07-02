@@ -72,6 +72,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                 selectedIndex = Screen.values().indexOf(selectedScreen),
                 onSelectionChanged = { selectedScreen = Screen.values()[it] },
                 textStyle = MaterialTheme.typography.headlineSmall,
+                loopSelection = true,
             )
             Divider(modifier = Modifier.fillMaxWidth().padding(vertical = Grid.One))
             Crossfade(
@@ -85,7 +86,7 @@ fun MainContent(modifier: Modifier = Modifier) {
                     CONDUCTOR_CROSSFADE -> CrossfadeScreen()
                     P_0_CURTAIN -> ContentVisibilityScreen()
                     P_1_CLICKER -> AnimatedContentClickerScreen()
-                    P_2_SIZE_SHIFTER -> AnimatedContentSizeScreen()
+                    P_2_SIZE_SHIFTER -> AnimatedContentSizeShifter()
                     P_3_MODIFIER_THUMBLERS -> ModifierThumblersScreen()
                     EXTRA_TWEENS -> AnimationSpecScreen()
                     EXTRA_BUBBLES -> AnimatedContentNumberScreen()
