@@ -197,15 +197,14 @@ fun ModifierThumblersScreen(
                                             .weight(1f)
                                             .padding(Grid.Half)
                                             .animateEnterExit(
-                                                enter = if (independentChildren) fadeIn() + expandIn() else EnterTransition.None,
-                                                exit = if (independentChildren) fadeOut() + shrinkOut() else ExitTransition.None,
+                                                enter = if (independentChildren) childItem.enterTransition else EnterTransition.None,
+                                                exit = if (independentChildren) childItem.exitTransition else ExitTransition.None,
                                                 label = childItem.label
                                             )
                                             .background(
                                                 color = item.color.getInverseColor().copy(alpha = 0.8f),
                                                 shape = RoundedCornerShape(Grid.Quarter),
                                             )
-
                                     )
                                 }
                             }
