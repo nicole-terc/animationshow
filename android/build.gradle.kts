@@ -5,7 +5,7 @@ plugins {
 }
 
 group "nstv.animationshow"
-version "1.0-SNAPSHOT"
+version "1.1"
 
 repositories {
     jcenter()
@@ -22,8 +22,8 @@ android {
         applicationId = "nstv.animationshow.android"
         minSdk = 24
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0-SNAPSHOT"
+        versionCode = 2
+        versionName = "1.1"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
