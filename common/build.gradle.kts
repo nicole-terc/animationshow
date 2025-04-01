@@ -10,9 +10,7 @@ version = "1.0-SNAPSHOT"
 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 kotlin {
     android()
-    jvm("desktop") {
-        jvmToolchain(11)
-    }
+    jvm("desktop")
     sourceSets {
         val commonMain by getting {
             dependencies {
