@@ -1,7 +1,6 @@
 package nstv.animationshow.common.screen.base
 
 import androidx.compose.animation.core.AnimationConstants
-import androidx.compose.animation.core.DurationBasedAnimationSpec
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -11,7 +10,6 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.RepeatMode.Restart
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.Spring.StiffnessHigh
 import androidx.compose.animation.core.StartOffset
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.repeatable

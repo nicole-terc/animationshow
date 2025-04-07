@@ -1,15 +1,26 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.compose")
+//    id("org.jetbrains.compose")
     id("com.android.library")
+//    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
 }
+
 
 group = "nstv.animationshow"
 version = "1.0-SNAPSHOT"
 
-@OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
 kotlin {
-    android()
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
     jvm("desktop")
     sourceSets {
         val commonMain by getting {
@@ -19,8 +30,9 @@ kotlin {
                 api(compose.material)
                 api(compose.material3)
                 api(compose.preview)
-                api("com.russhwolf:multiplatform-settings:1.0.0")
-                implementation("com.russhwolf:multiplatform-settings-no-arg:1.0.0")
+                api(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.no.arg)
+                implementation(libs.composablesheep)
             }
         }
         val commonTest by getting {
@@ -30,13 +42,8 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.appcompat:appcompat:1.5.1")
-                api("androidx.core:core-ktx:1.9.0")
-            }
-        }
-        val androidTest by getting {
-            dependencies {
-                implementation("junit:junit:4.13.2")
+                api(libs.androidx.appcompat)
+                api(libs.androidx.core.ktx)
             }
         }
         val desktopMain by getting {
@@ -49,11 +56,12 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(33)
+    namespace = "nstv.animationshow.android"
+    compileSdk = 35
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(33)
+        minSdk = 24
+        targetSdk = 35
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

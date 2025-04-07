@@ -3,19 +3,55 @@ package nstv.animationshow.common.screen
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.components.DropDownWithArrows
 import nstv.animationshow.common.design.slidesBackground
-import nstv.animationshow.common.screen.Screen.*
-import nstv.animationshow.common.screen.composableApis.*
+import nstv.animationshow.common.screen.Screen.ANIMATION_SPEC_TWEENS
+import nstv.animationshow.common.screen.Screen.CONDUCTOR_CROSSFADE
+import nstv.animationshow.common.screen.Screen.CURTAIN_ANIM_VISIBILITY
+import nstv.animationshow.common.screen.Screen.EXAMPLE_SIZE_CHANGER
+import nstv.animationshow.common.screen.Screen.EXTRA_BUBBLES
+import nstv.animationshow.common.screen.Screen.EXTRA_GRAPHS
+import nstv.animationshow.common.screen.Screen.EXTRA_HAPPY_BARS
+import nstv.animationshow.common.screen.Screen.EXTRA_TWEENS
+import nstv.animationshow.common.screen.Screen.NO_SHOW_CONTENT_SWAP
+import nstv.animationshow.common.screen.Screen.NO_SHOW_CURTAIN_V2
+import nstv.animationshow.common.screen.Screen.NO_SHOW_GRAPHS_BORING
+import nstv.animationshow.common.screen.Screen.NO_SHOW_GRID
+import nstv.animationshow.common.screen.Screen.NO_SHOW_RIPPLE
+import nstv.animationshow.common.screen.Screen.P_0_CURTAIN
+import nstv.animationshow.common.screen.Screen.P_1_CLICKER
+import nstv.animationshow.common.screen.Screen.P_2_SIZE_SHIFTER
+import nstv.animationshow.common.screen.Screen.P_3_MODIFIER_THUMBLERS
+import nstv.animationshow.common.screen.Screen.WIP_CHILDREN_ADVANCED
+import nstv.animationshow.common.screen.Screen.WIP_GRAPHS_LOOKAHEAD
+import nstv.animationshow.common.screen.composableApis.AnimatedContentClickerScreen
+import nstv.animationshow.common.screen.composableApis.AnimatedContentNumberScreen
+import nstv.animationshow.common.screen.composableApis.AnimatedContentScreen
+import nstv.animationshow.common.screen.composableApis.AnimatedContentSizeShifter
+import nstv.animationshow.common.screen.composableApis.AnimationSpecScreen
+import nstv.animationshow.common.screen.composableApis.ContentSizeModifierScreen
+import nstv.animationshow.common.screen.composableApis.ContentVisibilityScreen
+import nstv.animationshow.common.screen.composableApis.CrossfadeScreen
+import nstv.animationshow.common.screen.composableApis.ModifierThumblersScreen
+import nstv.animationshow.common.screen.composableApis.VisibilityScreen
+import nstv.animationshow.common.screen.composableApis.VisibilityTextBoxScreen
 import nstv.animationshow.common.screen.composableApis.chaos.AnimatedContentChaosFunScreen
 import nstv.animationshow.common.screen.composableApis.chaos.AnimatedContentChaosLookaheadScreen
 import nstv.animationshow.common.screen.composableApis.chaos.AnimatedContentChaosScreen
@@ -56,7 +92,7 @@ fun MainContent(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
     ) {
-        var selectedScreen by remember { mutableStateOf(EXAMPLE_SIZE_CHANGER) }
+        var selectedScreen by remember { mutableStateOf(P_3_MODIFIER_THUMBLERS) }
 
         Column(
             modifier = Modifier

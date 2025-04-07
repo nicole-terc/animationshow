@@ -44,7 +44,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.IntOffset
 import nstv.animationshow.common.design.Grid
-import nstv.animationshow.common.screen.base.AnimationSpecType.*
+import nstv.animationshow.common.screen.base.AnimationSpecType.Keyframes
+import nstv.animationshow.common.screen.base.AnimationSpecType.Repeatable
+import nstv.animationshow.common.screen.base.AnimationSpecType.Snap
+import nstv.animationshow.common.screen.base.AnimationSpecType.Spring
+import nstv.animationshow.common.screen.base.AnimationSpecType.Tween
 
 @OptIn(ExperimentalAnimationApi::class)
 val enterTransitions = mapOf(

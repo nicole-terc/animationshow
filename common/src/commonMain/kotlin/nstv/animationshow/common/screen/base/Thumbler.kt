@@ -3,6 +3,7 @@ package nstv.animationshow.common.screen.base
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.ui.graphics.Color
+import dev.nstv.composablesheep.library.model.Sheep
 import nstv.animationshow.common.design.TileColor
 
 data class Thumbler(
@@ -13,6 +14,7 @@ data class Thumbler(
     val exitTransition: ExitTransition,
     val expanded: Boolean = false,
     val showChildren: Boolean = false,
+    val sheep: Sheep = Sheep(fluffColor = color),
 )
 
 fun getThumblerList(count: Int = 5): List<Thumbler> =

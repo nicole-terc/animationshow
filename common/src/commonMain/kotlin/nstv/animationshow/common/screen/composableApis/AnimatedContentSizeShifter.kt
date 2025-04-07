@@ -31,7 +31,11 @@ import nstv.animationshow.common.extensions.nextItemLoop
 import nstv.animationshow.common.screen.base.ColorScreen
 import nstv.animationshow.common.screen.base.enterTransitions
 import nstv.animationshow.common.screen.base.exitTransitions
-import nstv.animationshow.common.screen.composableApis.ScreenMode.*
+import nstv.animationshow.common.screen.composableApis.ScreenMode.FullScreen
+import nstv.animationshow.common.screen.composableApis.ScreenMode.HalfHorizontal
+import nstv.animationshow.common.screen.composableApis.ScreenMode.HalfVertical
+import nstv.animationshow.common.screen.composableApis.ScreenMode.Quarter
+import nstv.animationshow.common.screen.composableApis.ScreenMode.values
 
 
 private enum class ScreenMode {

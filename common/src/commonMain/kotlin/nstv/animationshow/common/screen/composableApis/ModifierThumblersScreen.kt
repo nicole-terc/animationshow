@@ -7,11 +7,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.expandIn
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -42,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.nstv.composablesheep.library.ComposableSheep
 import nstv.animationshow.common.design.Grid
 import nstv.animationshow.common.design.components.CheckBoxLabel
 import nstv.animationshow.common.design.components.DropDownWithArrows
@@ -64,6 +63,7 @@ fun ModifierThumblersScreen(
     var showChildren by remember { mutableStateOf(true) }
     var independentChildren by remember { mutableStateOf(true) }
     var moreOptionsExpanded by remember { mutableStateOf(false) }
+    var sheepify by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         DropDownWithArrows(
@@ -124,6 +124,14 @@ fun ModifierThumblersScreen(
 
                 CheckBoxLabel(
                     modifier = Modifier.fillMaxWidth(),
+                    text = "Sheepify",
+                    checked = sheepify,
+                    onCheckedChange = { sheepify = it },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                )
+
+                CheckBoxLabel(
+                    modifier = Modifier.fillMaxWidth(),
                     text = "Show Children",
                     checked = showChildren,
                     onCheckedChange = { showChildren = it },
@@ -154,58 +162,90 @@ fun ModifierThumblersScreen(
         LazyVerticalGrid(modifier = Modifier.fillMaxSize(), columns = GridCells.Fixed(columns)) {
             items(count = items.size, key = { items[it].id }) { index ->
                 val item = items[index]
-                // Thumbler View
-                Column(
-                    modifier = Modifier
-                        .padding(Grid.Half)
-                        .background(color = item.color, shape = RoundedCornerShape(Grid.Half))
-                        .clickable {
-                            items = items.toMutableList().apply {
-                                this[index] = item.copy(expanded = !item.expanded, showChildren = false)
-                            }
-                        }
-                        // NicNote: Needs to be inside a LazyLayout to work
-                        .animateItemPlacement(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessMediumLow
-                            )
-                        )
-                        // NicNote: Needs to be before size modifiers, but after any other graphic layer modifiers
-                        .animateContentSize(
-                            finishedListener = { initialValue, targetValue ->
-                                if (targetValue.height > initialValue.height) {
-                                    items = items.toMutableList().apply {
-                                        this[index] = item.copy(showChildren = true)
-                                    }
+                if (sheepify) {
+                    // SHEEP!
+                    ComposableSheep(
+                        sheep = item.sheep,
+                        modifier = Modifier
+                            .padding(Grid.Half)
+                            .clickable {
+                                items = items.toMutableList().apply {
+                                    this[index] = item.copy(expanded = !item.expanded, showChildren = false)
                                 }
                             }
-                        )
-                        .height(if (item.expanded) 200.dp else 100.dp)
-                ) {
-                    if (showChildren) {
-                        AnimatedVisibility(
-                            visible = item.showChildren,
-                            enter = if (independentChildren) EnterTransition.None else fadeIn() + expandVertically(),
-                            exit = if (independentChildren) ExitTransition.None else fadeOut() + shrinkVertically(),
-                        ) {
-                            Column(modifier = Modifier.fillMaxSize().padding(Grid.One)) {
-                                inceptionItems.forEach { childItem ->
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .weight(1f)
-                                            .padding(Grid.Half)
-                                            .animateEnterExit(
-                                                enter = if (independentChildren) childItem.enterTransition else EnterTransition.None,
-                                                exit = if (independentChildren) childItem.exitTransition else ExitTransition.None,
-                                                label = childItem.label
-                                            )
-                                            .background(
-                                                color = item.color.getInverseColor().copy(alpha = 0.8f),
-                                                shape = RoundedCornerShape(Grid.Quarter),
-                                            )
-                                    )
+                            // NicNote: Needs to be inside a LazyLayout to work
+                            .animateItemPlacement(
+                                animationSpec = spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessMediumLow
+                                )
+                            )
+                            // NicNote: Needs to be before size modifiers, but after any other graphic layer modifiers
+                            .animateContentSize(
+                                finishedListener = { initialValue, targetValue ->
+                                    if (targetValue.height > initialValue.height) {
+                                        items = items.toMutableList().apply {
+                                            this[index] = item.copy(showChildren = true)
+                                        }
+                                    }
+                                }
+                            )
+                            .height(if (item.expanded) 200.dp else 100.dp)
+                    )
+                } else {
+                    // Thumbler View
+                    Column(
+                        modifier = Modifier
+                            .padding(Grid.Half)
+                            .background(color = item.color, shape = RoundedCornerShape(Grid.Half))
+                            .clickable {
+                                items = items.toMutableList().apply {
+                                    this[index] = item.copy(expanded = !item.expanded, showChildren = false)
+                                }
+                            }
+                            // NicNote: Needs to be inside a LazyLayout to work
+                            .animateItemPlacement(
+                                animationSpec = spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessMediumLow
+                                )
+                            )
+                            // NicNote: Needs to be before size modifiers, but after any other graphic layer modifiers
+                            .animateContentSize(
+                                finishedListener = { initialValue, targetValue ->
+                                    if (targetValue.height > initialValue.height) {
+                                        items = items.toMutableList().apply {
+                                            this[index] = item.copy(showChildren = true)
+                                        }
+                                    }
+                                }
+                            )
+                            .height(if (item.expanded) 200.dp else 100.dp)
+                    ) {
+                        if (showChildren) {
+                            AnimatedVisibility(
+                                visible = item.showChildren,
+                                enter = if (independentChildren) EnterTransition.None else fadeIn() + expandVertically(),
+                                exit = if (independentChildren) ExitTransition.None else fadeOut() + shrinkVertically(),
+                            ) {
+                                Column(modifier = Modifier.fillMaxSize().padding(Grid.One)) {
+                                    inceptionItems.forEach { childItem ->
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .weight(1f)
+                                                .padding(Grid.Half)
+                                                .animateEnterExit(
+                                                    enter = if (independentChildren) childItem.enterTransition else EnterTransition.None,
+                                                    exit = if (independentChildren) childItem.exitTransition else ExitTransition.None,
+                                                    label = childItem.label
+                                                )
+                                                .background(
+                                                    color = item.color.getInverseColor().copy(alpha = 0.8f),
+                                                    shape = RoundedCornerShape(Grid.Quarter),
+                                                )
+                                        )
+                                    }
                                 }
                             }
                         }

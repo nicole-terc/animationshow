@@ -1,8 +1,8 @@
 package nstv.animationshow.common.screen.base
 
 import androidx.compose.ui.graphics.Color
-import kotlin.random.Random
 import nstv.animationshow.common.design.TileColor
+import kotlin.random.Random
 
 data class Piece(
     val id: Int,

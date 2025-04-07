@@ -1,27 +1,30 @@
 plugins {
-    id("org.jetbrains.compose")
     id("com.android.application")
     kotlin("android")
+    alias(libs.plugins.composeCompiler)
 }
+
+
 
 group "nstv.animationshow"
 version "1.1"
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
     implementation(project(":common"))
-    implementation("androidx.activity:activity-compose:1.5.0")
+    implementation(libs.androidx.activity.compose)
 }
 
 android {
-    compileSdkVersion(33)
+    namespace = "nstv.animationshow.android"
+    compileSdk = 35
     defaultConfig {
         applicationId = "nstv.animationshow.android"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 35
         versionCode = 2
         versionName = "1.1"
     }

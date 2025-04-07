@@ -1,13 +1,13 @@
 package nstv.animationshow.common.screen.composableApis
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope.SlideDirection
-import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.animation.with
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -91,14 +91,15 @@ fun ContentVisibilityScreen(
                             scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
                             fadeOut(animationSpec = tween(90))
                 } else {
-                    slideIntoContainer(towards = SlideDirection.Down) with // Enter transition
-                            slideOutOfContainer(towards = Companion.Up)// Exit Transition
+                    slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Down) togetherWith  // Enter transition
+                            slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Up)// Exit Transition
                 }
             },
         ) { state ->
             Column(modifier = Modifier.fillMaxSize()) {
                 if (state) {
-                    ColorScreen(color = TileColor.map.values.toList()[colorIndex].copy(alpha = 0.8f),
+                    ColorScreen(
+                        color = TileColor.map.values.toList()[colorIndex].copy(alpha = 0.8f),
                         modifier = Modifier.fillMaxSize()
                             .clickable { colorIndex = TileColor.list.nextIndexLoop(colorIndex) }) {
                         Text(

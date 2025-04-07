@@ -22,7 +22,10 @@ import nstv.animationshow.common.screen.base.ColorScreen
 import nstv.animationshow.common.screen.base.LoadingScreen
 import nstv.animationshow.common.screen.base.enterTransitions
 import nstv.animationshow.common.screen.base.exitTransitions
-import nstv.animationshow.common.screen.composableApis.SubScreen.*
+import nstv.animationshow.common.screen.composableApis.SubScreen.ColorSubScreen
+import nstv.animationshow.common.screen.composableApis.SubScreen.GridSubScreen
+import nstv.animationshow.common.screen.composableApis.SubScreen.LoadingSubScreen
+import nstv.animationshow.common.screen.composableApis.SubScreen.None
 import nstv.animationshow.common.screen.squareGrid.SquareGrid
 
 
